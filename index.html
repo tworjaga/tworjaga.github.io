@@ -137,43 +137,30 @@
         .lang-option:hover { background: rgba(94, 106, 210, 0.2); }
         .lang-option.active { color: #5e6ad2; }
         
-        @keyframes radiation-pulse { 0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); } 50% { box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), 0 0 100px rgba(94, 106, 210, 0.3); } }
-        .cherenkov-glow { animation: radiation-pulse 3s ease-in-out infinite; }
-        
-        @keyframes radar-sweep { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-        .bluescope-radar { position: relative; overflow: hidden; }
-        .bluescope-radar::after { content: ''; position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 0deg, rgba(59, 130, 246, 0.1) 60deg, transparent 120deg); transform: translate(-50%, -50%); animation: radar-sweep 4s linear infinite; }
-        
-        @keyframes rf-scan { from { transform: translateX(0); } to { transform: translateX(20px); } }
-        .rf-waves { position: relative; }
-        .rf-waves::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(245, 158, 11, 0.3) 10px, rgba(245, 158, 11, 0.3) 20px); animation: rf-scan 2s linear infinite; }
-        
-        @keyframes flow-stream { from { left: -100%; } to { left: 100%; } }
-        .flow-particles { position: relative; overflow: hidden; }
-        .flow-particles::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent); animation: flow-stream 3s linear infinite; }
-        
-        @keyframes key-shimmer { 
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(139, 92, 246, 0.1);
-                border-color: rgba(139, 92, 246, 0.3);
-            } 
-            50% { 
-                box-shadow: 0 0 40px rgba(139, 92, 246, 0.6), inset 0 0 30px rgba(139, 92, 246, 0.2);
-                border-color: rgba(139, 92, 246, 0.6);
-            } 
+        @keyframes smooth-shine-blue { 
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2), inset 0 0 20px rgba(59, 130, 246, 0.05); } 
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.4), inset 0 0 30px rgba(59, 130, 246, 0.1); } 
         }
-        .key-rotate { 
-            animation: key-shimmer 3s ease-in-out infinite;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+        .shine-blue { animation: smooth-shine-blue 3s ease-in-out infinite; }
+        
+        @keyframes smooth-shine-red { 
+            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 20px rgba(239, 68, 68, 0.05); } 
+            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.4), inset 0 0 30px rgba(239, 68, 68, 0.1); } 
         }
+        .shine-red { animation: smooth-shine-red 3s ease-in-out infinite; }
+        
+        @keyframes smooth-shine-orange { 
+            0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.2), inset 0 0 20px rgba(249, 115, 22, 0.05); } 
+            50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.4), inset 0 0 30px rgba(249, 115, 22, 0.1); } 
+        }
+        .shine-orange { animation: smooth-shine-orange 3s ease-in-out infinite; }
+        
+        @keyframes smooth-shine-darkblue { 
+            0%, 100% { box-shadow: 0 0 20px rgba(30, 58, 138, 0.3), inset 0 0 20px rgba(30, 58, 138, 0.08); } 
+            50% { box-shadow: 0 0 40px rgba(30, 58, 138, 0.5), inset 0 0 30px rgba(30, 58, 138, 0.15); } 
+        }
+        .shine-darkblue { animation: smooth-shine-darkblue 3s ease-in-out infinite; }
 
-        
-        @keyframes shield-glow { 0%, 100% { filter: drop-shadow(0 0 5px rgba(94, 106, 210, 0.5)); } 50% { filter: drop-shadow(0 0 20px rgba(94, 106, 210, 0.8)); } }
-        .shield-pulse { animation: shield-glow 2s ease-in-out infinite; }
-        
-        @keyframes node-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
-        .graph-nodes { position: relative; }
-        .graph-nodes::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(236, 72, 153, 0.3) 2px, transparent 2px), radial-gradient(circle at 60% 70%, rgba(236, 72, 153, 0.3) 2px, transparent 2px), radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 2px, transparent 2px); animation: node-pulse 4s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased selection:bg-accent selection:text-white">
@@ -489,58 +476,59 @@
                 description: 'High-performance radiation detection and monitoring system. A Rust-based platform for real-time nuclear event tracking with advanced signal processing capabilities.',
                 tags: ['Rust', 'Systems', 'Hardware'],
                 metrics: { performance: 95, reliability: 92, complexity: 88 },
-                animation: 'cherenkov-glow',
-                color: '#3b82f6'
+                animation: 'shine-orange',
+                color: '#f97316'
             },
             {
                 name: 'BlueScope',
                 description: 'Bluetooth security analysis platform with ML-powered anomaly detection. Real-time BLE traffic monitoring for IoT security auditing and device profiling.',
                 tags: ['Python', 'Security', 'ML'],
                 metrics: { performance: 90, reliability: 88, complexity: 85 },
-                animation: 'bluescope-radar',
-                color: '#5e6ad2'
+                animation: 'shine-blue',
+                color: '#3b82f6'
             },
             {
                 name: 'Flipper RF Lab',
                 description: 'RF signal analysis toolkit for Flipper Zero. Comprehensive radio frequency testing suite with protocol decoding and signal manipulation capabilities.',
                 tags: ['C', 'RF', 'Hardware'],
                 metrics: { performance: 88, reliability: 90, complexity: 82 },
-                animation: 'rf-waves',
-                color: '#f59e0b'
+                animation: 'shine-red',
+                color: '#ef4444'
             },
             {
                 name: 'FlowScope',
                 description: 'Network traffic analysis and visualization system. Real-time packet inspection with flow-based anomaly detection for security operations.',
-                tags: ['Rust', 'Networking', 'Security'],
+                tags: ['Python', 'Networking', 'Security'],
                 metrics: { performance: 93, reliability: 89, complexity: 90 },
-                animation: 'flow-particles',
-                color: '#10b981'
+                animation: 'shine-blue',
+                color: '#3b82f6'
             },
             {
                 name: 'Keyspace',
                 description: 'Cryptographic key generation and management system. Secure entropy handling with hardware-backed key derivation for enterprise use.',
-                tags: ['Rust', 'Crypto', 'Security'],
+                tags: ['Python', 'Crypto', 'Security'],
                 metrics: { performance: 91, reliability: 95, complexity: 87 },
-                animation: 'key-rotate',
-                color: '#8b5cf6'
+                animation: 'shine-blue',
+                color: '#3b82f6'
             },
             {
                 name: 'PivotMap',
                 description: 'Network pivoting and lateral movement visualization. Attack path mapping tool for penetration testing and red team operations.',
                 tags: ['Python', 'Security', 'Graph'],
                 metrics: { performance: 87, reliability: 85, complexity: 92 },
-                animation: 'graph-nodes',
-                color: '#ec4899'
+                animation: 'shine-blue',
+                color: '#3b82f6'
             },
             {
                 name: 'SecureMySite',
                 description: 'Automated web security scanning platform. Continuous vulnerability assessment with intelligent threat prioritization and remediation guidance.',
                 tags: ['Python', 'Web', 'Security'],
                 metrics: { performance: 89, reliability: 91, complexity: 83 },
-                animation: 'shield-pulse',
-                color: '#5e6ad2'
+                animation: 'shine-blue',
+                color: '#3b82f6'
             }
         ];
+
 
         const techStack = [
             { name: 'Rust', icon: '⚙️', category: 'Systems' },
