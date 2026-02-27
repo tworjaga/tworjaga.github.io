@@ -129,9 +129,15 @@
         .reveal { opacity: 1; transform: none; transition: none; }
         .reveal.active { opacity: 1; transform: none; }
 
-
+        .repo-card { position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .repo-card::before { content: ''; position: absolute; inset: 0; border-radius: 1rem; padding: 1px; background: linear-gradient(135deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0.6; transition: opacity 0.3s ease; }
+        .repo-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 60px var(--repo-glow); }
+        .repo-card:hover::before { opacity: 1; animation: border-rotate 3s linear infinite; }
+        
+        @keyframes border-rotate { 0% { background: linear-gradient(0deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); } 25% { background: linear-gradient(90deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); } 50% { background: linear-gradient(180deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); } 75% { background: linear-gradient(270deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); } 100% { background: linear-gradient(360deg, var(--repo-color) 0%, transparent 50%, var(--repo-color) 100%); } }
 
         .lang-switcher { position: relative; }
+
         .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: rgba(19, 19, 31, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 0; min-width: 120px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; }
         .lang-switcher:hover .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
         .lang-option { padding: 8px 16px; cursor: pointer; transition: background 0.2s; font-size: 14px; }
@@ -542,9 +548,24 @@
 
         function renderRepositories() {
             const container = document.getElementById('repos-container');
+            
+            const colorMap = {
+                'FlowScope': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+                'BlueScope': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+                'Keyspace': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+                'PivotMap': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+                'SecureMySite': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.3)' },
+                'Flipper RF Lab': { color: '#ef4444', glow: 'rgba(239, 68, 68, 0.3)' },
+                'Cherenkov': { color: '#f97316', glow: 'rgba(249, 115, 22, 0.3)' }
+            };
+            
             repositories.forEach(repo => {
                 const div = document.createElement('div');
-                div.className = 'bg-[#13131f] rounded-2xl p-6 border border-white/10';
+                const colors = colorMap[repo.name] || { color: '#5e6ad2', glow: 'rgba(94, 106, 210, 0.3)' };
+                
+                div.className = 'repo-card bg-[#13131f] rounded-2xl p-6';
+                div.style.setProperty('--repo-color', colors.color);
+                div.style.setProperty('--repo-glow', colors.glow);
 
                 div.innerHTML = `
                     <div>
@@ -557,15 +578,15 @@
                         <p class="text-gray-400 text-sm mb-6 leading-relaxed">${repo.description}</p>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-lg font-bold text-gray-300">${repo.metrics.performance}%</div>
+                                <div class="text-lg font-bold" style="color: ${colors.color}">${repo.metrics.performance}%</div>
                                 <div class="text-xs text-gray-500">Performance</div>
                             </div>
                             <div>
-                                <div class="text-lg font-bold text-gray-300">${repo.metrics.reliability}%</div>
+                                <div class="text-lg font-bold" style="color: ${colors.color}">${repo.metrics.reliability}%</div>
                                 <div class="text-xs text-gray-500">Reliability</div>
                             </div>
                             <div>
-                                <div class="text-lg font-bold text-gray-300">${repo.metrics.complexity}%</div>
+                                <div class="text-lg font-bold" style="color: ${colors.color}">${repo.metrics.complexity}%</div>
                                 <div class="text-xs text-gray-500">Complexity</div>
                             </div>
                         </div>
@@ -574,6 +595,7 @@
                 container.appendChild(div);
             });
         }
+
 
 
 
