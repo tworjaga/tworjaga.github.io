@@ -128,8 +128,9 @@
         .gradient-text { background: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .repo-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .repo-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(94, 106, 210, 0.15); }
+        .repo-card { transition: none; }
+        .repo-card:hover { transform: none; box-shadow: none; }
+
         .lang-switcher { position: relative; }
         .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: rgba(19, 19, 31, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 0; min-width: 120px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; }
         .lang-switcher:hover .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -543,11 +544,10 @@
             const container = document.getElementById('repos-container');
             repositories.forEach(repo => {
                 const div = document.createElement('div');
-                div.className = 'glass rounded-2xl p-6 repo-card relative overflow-hidden';
+                div.className = 'glass rounded-2xl p-6 repo-card';
 
                 div.innerHTML = `
-                    <div class="absolute top-0 right-0 w-32 h-32 opacity-10" style="background: radial-gradient(circle, ${repo.color} 0%, transparent 70%);"></div>
-                    <div class="relative z-10">
+                    <div>
                         <div class="flex items-start justify-between mb-4">
                             <h3 class="text-xl font-bold text-white">${repo.name}</h3>
                             <div class="flex gap-2">
@@ -557,15 +557,15 @@
                         <p class="text-gray-400 text-sm mb-6 leading-relaxed">${repo.description}</p>
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
-                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.performance}%</div>
+                                <div class="text-lg font-bold text-gray-300">${repo.metrics.performance}%</div>
                                 <div class="text-xs text-gray-500">Performance</div>
                             </div>
                             <div>
-                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.reliability}%</div>
+                                <div class="text-lg font-bold text-gray-300">${repo.metrics.reliability}%</div>
                                 <div class="text-xs text-gray-500">Reliability</div>
                             </div>
                             <div>
-                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.complexity}%</div>
+                                <div class="text-lg font-bold text-gray-300">${repo.metrics.complexity}%</div>
                                 <div class="text-xs text-gray-500">Complexity</div>
                             </div>
                         </div>
@@ -574,6 +574,7 @@
                 container.appendChild(div);
             });
         }
+
 
         function renderTechStack() {
             const container = document.getElementById('tech-grid');
