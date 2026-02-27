@@ -25,7 +25,6 @@
         .lang-option:hover { background: rgba(94, 106, 210, 0.2); }
         .lang-option.active { color: #5e6ad2; }
         
-        /* Repository-specific animations */
         @keyframes radiation-pulse { 0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); } 50% { box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), 0 0 100px rgba(94, 106, 210, 0.3); } }
         .cherenkov-glow { animation: radiation-pulse 3s ease-in-out infinite; }
         
@@ -243,7 +242,6 @@
     </footer>
 
     <script>
-        // Translations
         const translations = {
             en: {
                 title: "Alexey | Systems & Security Engineer",
@@ -336,9 +334,202 @@
             });
         }
 
-        // Skills Data
         const skills = [
             { name: 'System Design', level: 85, color: '#5e6ad2' },
             { name: 'Security Research', level: 90, color: '#ec4899' },
             { name: 'Rust (Systems)', level: 75, color: '#dea584' },
-            { name: 'Python
+            { name: 'Python (Automation)', level: 95, color: '#3776ab' },
+            { name: 'Hardware/RF', level: 88, color: '#f59e0b' }
+        ];
+
+        const repositories = [
+            {
+                name: 'Cherenkov',
+                description: 'High-performance radiation detection and monitoring system. A Rust-based platform for real-time nuclear event tracking with advanced signal processing capabilities.',
+                tags: ['Rust', 'Systems', 'Hardware'],
+                metrics: { performance: 95, reliability: 92, complexity: 88 },
+                animation: 'cherenkov-glow',
+                color: '#3b82f6'
+            },
+            {
+                name: 'BlueScope',
+                description: 'Bluetooth security analysis platform with ML-powered anomaly detection. Real-time BLE traffic monitoring for IoT security auditing and device profiling.',
+                tags: ['Python', 'Security', 'ML'],
+                metrics: { performance: 90, reliability: 88, complexity: 85 },
+                animation: 'bluescope-radar',
+                color: '#5e6ad2'
+            },
+            {
+                name: 'Flipper RF Lab',
+                description: 'RF signal analysis toolkit for Flipper Zero. Comprehensive radio frequency testing suite with protocol decoding and signal manipulation capabilities.',
+                tags: ['C', 'RF', 'Hardware'],
+                metrics: { performance: 88, reliability: 90, complexity: 82 },
+                animation: 'rf-waves',
+                color: '#f59e0b'
+            },
+            {
+                name: 'FlowScope',
+                description: 'Network traffic analysis and visualization system. Real-time packet inspection with flow-based anomaly detection for security operations.',
+                tags: ['Rust', 'Networking', 'Security'],
+                metrics: { performance: 93, reliability: 89, complexity: 90 },
+                animation: 'flow-particles',
+                color: '#10b981'
+            },
+            {
+                name: 'Keyspace',
+                description: 'Cryptographic key generation and management system. Secure entropy handling with hardware-backed key derivation for enterprise use.',
+                tags: ['Rust', 'Crypto', 'Security'],
+                metrics: { performance: 91, reliability: 95, complexity: 87 },
+                animation: 'key-rotate',
+                color: '#8b5cf6'
+            },
+            {
+                name: 'PivotMap',
+                description: 'Network pivoting and lateral movement visualization. Attack path mapping tool for penetration testing and red team operations.',
+                tags: ['Python', 'Security', 'Graph'],
+                metrics: { performance: 87, reliability: 85, complexity: 92 },
+                animation: 'graph-nodes',
+                color: '#ec4899'
+            },
+            {
+                name: 'SecureMySite',
+                description: 'Automated web security scanning platform. Continuous vulnerability assessment with intelligent threat prioritization and remediation guidance.',
+                tags: ['Python', 'Web', 'Security'],
+                metrics: { performance: 89, reliability: 91, complexity: 83 },
+                animation: 'shield-pulse',
+                color: '#5e6ad2'
+            }
+        ];
+
+        const techStack = [
+            { name: 'Rust', icon: '⚙️', category: 'Systems' },
+            { name: 'Python', icon: '🐍', category: 'Automation' },
+            { name: 'C/C++', icon: '🔧', category: 'Low-level' },
+            { name: 'Go', icon: '🐹', category: 'Backend' },
+            { name: 'Linux', icon: '🐧', category: 'OS' },
+            { name: 'Docker', icon: '🐳', category: 'DevOps' },
+            { name: 'Kubernetes', icon: '☸️', category: 'Orchestration' },
+            { name: 'AWS', icon: '☁️', category: 'Cloud' }
+        ];
+
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            skills.forEach(skill => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center gap-4';
+                div.innerHTML = `
+                    <div class="flex-1">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-300">${skill.name}</span>
+                            <span class="text-sm text-gray-500">${skill.level}%</span>
+                        </div>
+                        <div class="h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-1000 ease-out" style="width: 0%; background-color: ${skill.color};" data-width="${skill.level}"></div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('[data-width]').forEach(bar => {
+                    bar.style.width = bar.dataset.width + '%';
+                });
+            }, 500);
+        }
+
+        function renderRepositories() {
+            const container = document.getElementById('repos-container');
+            repositories.forEach(repo => {
+                const div = document.createElement('div');
+                div.className = `glass rounded-2xl p-6 repo-card relative overflow-hidden ${repo.animation}`;
+                div.innerHTML = `
+                    <div class="absolute top-0 right-0 w-32 h-32 opacity-10" style="background: radial-gradient(circle, ${repo.color} 0%, transparent 70%);"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-4">
+                            <h3 class="text-xl font-bold text-white">${repo.name}</h3>
+                            <div class="flex gap-2">
+                                ${repo.tags.map(tag => `<span class="px-2 py-1 text-xs rounded bg-white/10 text-gray-300">${tag}</span>`).join('')}
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">${repo.description}</p>
+                        <div class="grid grid-cols-3 gap-4 text-center">
+                            <div>
+                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.performance}%</div>
+                                <div class="text-xs text-gray-500">Performance</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.reliability}%</div>
+                                <div class="text-xs text-gray-500">Reliability</div>
+                            </div>
+                            <div>
+                                <div class="text-lg font-bold" style="color: ${repo.color}">${repo.metrics.complexity}%</div>
+                                <div class="text-xs text-gray-500">Complexity</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderTechStack() {
+            const container = document.getElementById('tech-grid');
+            techStack.forEach(tech => {
+                const div = document.createElement('div');
+                div.className = 'text-center group cursor-pointer';
+                div.innerHTML = `
+                    <div class="text-3xl mb-2 group-hover:scale-110 transition-transform">${tech.icon}</div>
+                    <div class="font-medium text-sm text-gray-300">${tech.name}</div>
+                    <div class="text-xs text-gray-500">${tech.category}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function openContact() {
+            document.getElementById('contact-modal').classList.remove('hidden');
+        }
+
+        function closeContact() {
+            document.getElementById('contact-modal').classList.add('hidden');
+        }
+
+        function copyEmail() {
+            navigator.clipboard.writeText('tworjaga@gmail.com').then(() => {
+                const feedback = document.getElementById('copy-feedback');
+                feedback.classList.remove('translate-y-full');
+                setTimeout(() => feedback.classList.add('translate-y-full'), 2000);
+            });
+        }
+
+        // Intersection Observer for reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            setLanguage(currentLang);
+            renderSkills();
+            renderRepositories();
+            renderTechStack();
+            
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.getElementById('navbar');
+                if (window.pageYOffset > 100) {
+                    navbar.classList.add('glass-strong');
+                    navbar.classList.remove('glass');
+                } else {
+                    navbar.classList.remove('glass-strong');
+                    navbar.classList.add('glass');
+                }
+            });
+        });
