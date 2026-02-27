@@ -137,29 +137,7 @@
         .lang-option:hover { background: rgba(94, 106, 210, 0.2); }
         .lang-option.active { color: #5e6ad2; }
         
-        @keyframes smooth-shine-blue { 
-            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2), inset 0 0 20px rgba(59, 130, 246, 0.05); } 
-            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.4), inset 0 0 30px rgba(59, 130, 246, 0.1); } 
-        }
-        .shine-blue { animation: smooth-shine-blue 3s ease-in-out infinite; }
-        
-        @keyframes smooth-shine-red { 
-            0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 20px rgba(239, 68, 68, 0.05); } 
-            50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.4), inset 0 0 30px rgba(239, 68, 68, 0.1); } 
-        }
-        .shine-red { animation: smooth-shine-red 3s ease-in-out infinite; }
-        
-        @keyframes smooth-shine-orange { 
-            0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.2), inset 0 0 20px rgba(249, 115, 22, 0.05); } 
-            50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.4), inset 0 0 30px rgba(249, 115, 22, 0.1); } 
-        }
-        .shine-orange { animation: smooth-shine-orange 3s ease-in-out infinite; }
-        
-        @keyframes smooth-shine-darkblue { 
-            0%, 100% { box-shadow: 0 0 20px rgba(30, 58, 138, 0.3), inset 0 0 20px rgba(30, 58, 138, 0.08); } 
-            50% { box-shadow: 0 0 40px rgba(30, 58, 138, 0.5), inset 0 0 30px rgba(30, 58, 138, 0.15); } 
-        }
-        .shine-darkblue { animation: smooth-shine-darkblue 3s ease-in-out infinite; }
+
 
     </style>
 </head>
@@ -476,7 +454,6 @@
                 description: 'High-performance radiation detection and monitoring system. A Rust-based platform for real-time nuclear event tracking with advanced signal processing capabilities.',
                 tags: ['Rust', 'Systems', 'Hardware'],
                 metrics: { performance: 95, reliability: 92, complexity: 88 },
-                animation: 'shine-orange',
                 color: '#f97316'
             },
             {
@@ -484,7 +461,6 @@
                 description: 'Bluetooth security analysis platform with ML-powered anomaly detection. Real-time BLE traffic monitoring for IoT security auditing and device profiling.',
                 tags: ['Python', 'Security', 'ML'],
                 metrics: { performance: 90, reliability: 88, complexity: 85 },
-                animation: 'shine-blue',
                 color: '#3b82f6'
             },
             {
@@ -492,7 +468,6 @@
                 description: 'RF signal analysis toolkit for Flipper Zero. Comprehensive radio frequency testing suite with protocol decoding and signal manipulation capabilities.',
                 tags: ['C', 'RF', 'Hardware'],
                 metrics: { performance: 88, reliability: 90, complexity: 82 },
-                animation: 'shine-red',
                 color: '#ef4444'
             },
             {
@@ -500,7 +475,6 @@
                 description: 'Network traffic analysis and visualization system. Real-time packet inspection with flow-based anomaly detection for security operations.',
                 tags: ['Python', 'Networking', 'Security'],
                 metrics: { performance: 93, reliability: 89, complexity: 90 },
-                animation: 'shine-blue',
                 color: '#3b82f6'
             },
             {
@@ -508,7 +482,6 @@
                 description: 'Cryptographic key generation and management system. Secure entropy handling with hardware-backed key derivation for enterprise use.',
                 tags: ['Python', 'Crypto', 'Security'],
                 metrics: { performance: 91, reliability: 95, complexity: 87 },
-                animation: 'shine-blue',
                 color: '#3b82f6'
             },
             {
@@ -516,7 +489,6 @@
                 description: 'Network pivoting and lateral movement visualization. Attack path mapping tool for penetration testing and red team operations.',
                 tags: ['Python', 'Security', 'Graph'],
                 metrics: { performance: 87, reliability: 85, complexity: 92 },
-                animation: 'shine-blue',
                 color: '#3b82f6'
             },
             {
@@ -524,10 +496,10 @@
                 description: 'Automated web security scanning platform. Continuous vulnerability assessment with intelligent threat prioritization and remediation guidance.',
                 tags: ['Python', 'Web', 'Security'],
                 metrics: { performance: 89, reliability: 91, complexity: 83 },
-                animation: 'shine-blue',
                 color: '#3b82f6'
             }
         ];
+
 
 
         const techStack = [
@@ -571,7 +543,8 @@
             const container = document.getElementById('repos-container');
             repositories.forEach(repo => {
                 const div = document.createElement('div');
-                div.className = `glass rounded-2xl p-6 repo-card relative overflow-hidden ${repo.animation}`;
+                div.className = 'glass rounded-2xl p-6 repo-card relative overflow-hidden';
+
                 div.innerHTML = `
                     <div class="absolute top-0 right-0 w-32 h-32 opacity-10" style="background: radial-gradient(circle, ${repo.color} 0%, transparent 70%);"></div>
                     <div class="relative z-10">
