@@ -126,8 +126,9 @@
         .glass-strong { background: rgba(19, 19, 31, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.12); }
         .glow { box-shadow: 0 0 40px rgba(94, 106, 210, 0.3); }
         .gradient-text { background: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 1; transform: none; transition: none; }
+        .reveal.active { opacity: 1; transform: none; }
+
         .repo-card { transition: none; }
         .repo-card:hover { transform: none; box-shadow: none; }
 
@@ -606,23 +607,12 @@
             });
         }
 
-        // Intersection Observer for reveal animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             setLanguage(currentLang);
             renderSkills();
             renderRepositories();
             renderTechStack();
-            
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
             
             // Navbar scroll effect
             window.addEventListener('scroll', () => {
@@ -636,6 +626,7 @@
                 }
             });
         });
+
     </script>
 </body>
 </html>
