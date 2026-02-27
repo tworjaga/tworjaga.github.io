@@ -1,7 +1,0 @@
-# Append JavaScript to index.html
-js = '''.forEach(p=>{p.x+=p.speedX;p.y+=p.speedY;if(p.x<0||p.x>canvas.width)p.speedX*=-1;if(p.y<0||p.y>canvas.height)p.speedY*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);ctx.fillStyle='rgba(0,210,255,'+p.opacity+')';ctx.fill()});requestAnimationFrame(animateParticles)}animateParticles();window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight});const observer=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){e.target.style.animation='fadeUp 0.6s ease forwards';observer.unobserve(e.target)}})},{threshold:0.1});document.querySelectorAll('.reveal').forEach(e=>observer.observe(e));function filterRepos(t){const e=document.querySelectorAll('.repo-card');const n=document.querySelectorAll('.filter-btn');n.forEach(e=>e.classList.remove('active'));event.target.classList.add('active');e.forEach(e=>{if(t==='all'||e.dataset.lang===t){e.style.display='block';setTimeout(()=>e.style.opacity='1',10)}else{e.style.opacity='0';setTimeout(()=>e.style.display='none',300)}})}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener('click',function(e){e.preventDefault();const t=document.querySelector(this.getAttribute('href'));if(t){t.scrollIntoView({behavior:'smooth',block:'start'})}})});</script></body></html>'''
-
-with open('index.html', 'a', encoding='utf-8') as f:
-    f.write(js)
-
-print('JavaScript appended successfully')
