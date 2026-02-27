@@ -8,516 +8,212 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        dark: '#0a0a0f',
-                        darker: '#050508',
-                        accent: '#5e6ad2',
-                        'accent-glow': '#8b5cf6',
-                        'accent-pink': '#ec4899',
-                        surface: '#13131f',
-                        'surface-light': '#1c1c2e',
-                    },
-                    animation: {
-                        'gradient-x': 'gradient-x 15s ease infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'spin-slow': 'spin 20s linear infinite',
-                        'spin-reverse': 'spin-reverse 15s linear infinite',
-                        'blob': 'blob 7s infinite',
-                    },
-                    keyframes: {
-                        'gradient-x': {
-                            '0%, 100%': { 'background-position': '0% 50%' },
-                            '50%': { 'background-position': '100% 50%' },
-                        },
-                        'float': {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        },
-                        'spin-reverse': {
-                            '0%': { transform: 'rotate(0deg)' },
-                            '100%': { transform: 'rotate(-360deg)' },
-                        },
-                        'blob': {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body {
-            background-color: #0a0a0f;
-            color: #e2e8f0;
-            overflow-x: hidden;
-        }
+        body { background-color: #0a0a0f; color: #e2e8f0; overflow-x: hidden; }
+        .glass { background: rgba(19, 19, 31, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-strong { background: rgba(19, 19, 31, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.12); }
+        .glow { box-shadow: 0 0 40px rgba(94, 106, 210, 0.3); }
+        .gradient-text { background: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #ec4899 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .repo-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .repo-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(94, 106, 210, 0.15); }
+        .lang-switcher { position: relative; }
+        .lang-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: rgba(19, 19, 31, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px 0; min-width: 120px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; }
+        .lang-switcher:hover .lang-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+        .lang-option { padding: 8px 16px; cursor: pointer; transition: background 0.2s; font-size: 14px; }
+        .lang-option:hover { background: rgba(94, 106, 210, 0.2); }
+        .lang-option.active { color: #5e6ad2; }
         
-        .glass {
-            background: rgba(19, 19, 31, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+        /* Repository-specific animations */
+        @keyframes radiation-pulse { 0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); } 50% { box-shadow: 0 0 60px rgba(59, 130, 246, 0.6), 0 0 100px rgba(94, 106, 210, 0.3); } }
+        .cherenkov-glow { animation: radiation-pulse 3s ease-in-out infinite; }
         
-        .glass-strong {
-            background: rgba(19, 19, 31, 0.85);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
+        @keyframes radar-sweep { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .bluescope-radar { position: relative; overflow: hidden; }
+        .bluescope-radar::after { content: ''; position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 0deg, rgba(59, 130, 246, 0.1) 60deg, transparent 120deg); transform: translate(-50%, -50%); animation: radar-sweep 4s linear infinite; }
         
-        .glow {
-            box-shadow: 0 0 40px rgba(94, 106, 210, 0.3);
-        }
+        @keyframes rf-scan { from { transform: translateX(0); } to { transform: translateX(20px); } }
+        .rf-waves { position: relative; }
+        .rf-waves::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 30px; background: repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(245, 158, 11, 0.3) 10px, rgba(245, 158, 11, 0.3) 20px); animation: rf-scan 2s linear infinite; }
         
-        .text-glow {
-            text-shadow: 0 0 30px rgba(94, 106, 210, 0.5);
-        }
+        @keyframes flow-stream { from { left: -100%; } to { left: 100%; } }
+        .flow-particles { position: relative; overflow: hidden; }
+        .flow-particles::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent); animation: flow-stream 3s linear infinite; }
         
-        .gradient-text {
-            background: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 50%, #ec4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        @keyframes key-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .key-rotate { animation: key-spin 8s linear infinite; }
         
-        .noise {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
+        @keyframes shield-glow { 0%, 100% { filter: drop-shadow(0 0 5px rgba(94, 106, 210, 0.5)); } 50% { filter: drop-shadow(0 0 20px rgba(94, 106, 210, 0.8)); } }
+        .shield-pulse { animation: shield-glow 2s ease-in-out infinite; }
         
-        .cursor-dot,
-        .cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: #5e6ad2;
-        }
-        
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(94, 106, 210, 0.3);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        
-        .cursor-outline.hover {
-            width: 60px;
-            height: 60px;
-            background: rgba(94, 106, 210, 0.1);
-            border-color: rgba(94, 106, 210, 0.6);
-        }
-        
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .chart-line {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: draw 2s ease-out forwards;
-        }
-        
-        @keyframes draw {
-            to { stroke-dashoffset: 0; }
-        }
-        
-        .bar-fill {
-            transform: scaleY(0);
-            transform-origin: bottom;
-            animation: grow 1s ease-out forwards;
-        }
-        
-        @keyframes grow {
-            to { transform: scaleY(1); }
-        }
-        
-        .repo-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .repo-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 80px rgba(94, 106, 210, 0.15);
-        }
-        
-        .metric-circle {
-            transform: rotate(-90deg);
-            transform-origin: center;
-        }
-        
-        .metric-progress {
-            stroke-dasharray: 283;
-            stroke-dashoffset: 283;
-            transition: stroke-dashoffset 1.5s ease-out;
-        }
-        
-        .grid-bg {
-            background-image: 
-                linear-gradient(rgba(94, 106, 210, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(94, 106, 210, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
-        
-        /* Animated Background for Repo Section */
-        .repo-section-bg {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .repo-section-bg::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(94, 106, 210, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
-            animation: blob 20s infinite alternate;
-            pointer-events: none;
-        }
-        
-        .floating-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, #5e6ad2, #8b5cf6);
-            top: 10%;
-            left: -10%;
-            animation: float 10s ease-in-out infinite, pulse-slow 8s ease-in-out infinite;
-        }
-        
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            top: 40%;
-            right: -5%;
-            animation: float 12s ease-in-out infinite reverse, pulse-slow 10s ease-in-out infinite;
-        }
-        
-        .orb-3 {
-            width: 350px;
-            height: 350px;
-            background: linear-gradient(135deg, #3b82f6, #5e6ad2);
-            bottom: 10%;
-            left: 30%;
-            animation: float 15s ease-in-out infinite, pulse-slow 12s ease-in-out infinite;
-        }
-        
-        .connection-line {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, rgba(94, 106, 210, 0.3), transparent);
-            height: 1px;
-            width: 100%;
-            animation: scan 8s linear infinite;
-        }
-        
-        @keyframes scan {
-            0% { transform: translateX(-100%); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateX(100%); opacity: 0; }
-        }
-        
-        .data-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #5e6ad2;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #5e6ad2;
-            animation: particle-float 20s infinite linear;
-        }
-        
-        @keyframes particle-float {
-            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
-        }
-        
-        .hex-grid {
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%235e6ad2' fill-opacity='0.03' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.6;
-        }
-        
-        .glow-text {
-            animation: glow-pulse 3s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow-pulse {
-            from { text-shadow: 0 0 20px rgba(94, 106, 210, 0.5); }
-            to { text-shadow: 0 0 40px rgba(94, 106, 210, 0.8), 0 0 60px rgba(139, 92, 246, 0.4); }
-        }
+        @keyframes node-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        .graph-nodes { position: relative; }
+        .graph-nodes::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(236, 72, 153, 0.3) 2px, transparent 2px), radial-gradient(circle at 60% 70%, rgba(236, 72, 153, 0.3) 2px, transparent 2px), radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.3) 2px, transparent 2px); animation: node-pulse 4s ease-in-out infinite; }
     </style>
 </head>
 <body class="antialiased selection:bg-accent selection:text-white">
-    <div class="noise"></div>
-    <div class="cursor-dot hidden md:block"></div>
-    <div class="cursor-outline hidden md:block"></div>
-    
-    <!-- Navigation -->
     <nav class="fixed top-0 w-full z-40 glass border-b border-white/5 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2 cursor-hover" onclick="window.scrollTo(0,0)">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-glow flex items-center justify-center font-bold text-white font-mono text-sm">A</div>
                 <span class="font-semibold text-lg tracking-tight">Alexey</span>
             </div>
             <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
-                <a href="#about" class="hover:text-white transition-colors cursor-hover relative group">
-                    About
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#systems" class="hover:text-white transition-colors cursor-hover relative group">
-                    Systems
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#stack" class="hover:text-white transition-colors cursor-hover relative group">
-                    Stack
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
-                </a>
-                <a href="#contact" class="hover:text-white transition-colors cursor-hover relative group">
-                    Contact
-                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full"></span>
-                </a>
+                <a href="#about" class="hover:text-white transition-colors" data-i18n="nav.about">About</a>
+                <a href="#systems" class="hover:text-white transition-colors" data-i18n="nav.systems">Systems</a>
+                <a href="#stack" class="hover:text-white transition-colors" data-i18n="nav.stack">Stack</a>
+                <a href="#contact" class="hover:text-white transition-colors" data-i18n="nav.contact">Contact</a>
             </div>
-            <button onclick="openContact()" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-all cursor-hover hover:border-accent/50">
-                Get in Touch
-            </button>
+            <div class="flex items-center gap-4">
+                <div class="lang-switcher">
+                    <button class="px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-all flex items-center gap-2">
+                        <span id="current-lang">EN</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="lang-dropdown">
+                        <div class="lang-option active" data-lang="en" onclick="setLanguage('en')">English</div>
+                        <div class="lang-option" data-lang="ru" onclick="setLanguage('ru')">Russian</div>
+                        <div class="lang-option" data-lang="de" onclick="setLanguage('de')">German</div>
+                        <div class="lang-option" data-lang="zh" onclick="setLanguage('zh')">Chinese</div>
+                    </div>
+                </div>
+                <button onclick="openContact()" class="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-medium transition-all hover:border-accent/50" data-i18n="nav.getInTouch">Get in Touch</button>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-dark/50 to-dark pointer-events-none"></div>
-        
-        <!-- Animated Background Elements -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-glow/20 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent-pink/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 4s;"></div>
-        
         <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
             <div class="reveal active">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-400 mb-6 hover:border-accent/30 transition-colors cursor-hover">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-gray-400 mb-6">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    Available for opportunities
+                    <span data-i18n="hero.available">Available for opportunities</span>
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight glow-text">
-                    Building <span class="gradient-text">reliable systems</span><br>
-                    through methodical engineering
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
+                    <span data-i18n="hero.building">Building</span> <span class="gradient-text" data-i18n="hero.reliableSystems">reliable systems</span><br>
+                    <span data-i18n="hero.through">through methodical engineering</span>
                 </h1>
-                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Mid-Level Software Engineer specializing in Backend, Systems, and Security. 
-                    Self-taught, hardware-curious, and driven by understanding what happens beneath the surface.
+                <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed" data-i18n="hero.description">
+                    Mid-Level Software Engineer specializing in Backend, Systems, and Security. Self-taught, hardware-curious, and driven by understanding what happens beneath the surface.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="#systems" class="px-8 py-4 rounded-xl bg-accent hover:bg-accent/90 text-white font-medium transition-all cursor-hover glow flex items-center justify-center gap-2 group">
-                        View Systems
-                        <svg class="w-4 h-4 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    <a href="#systems" class="px-8 py-4 rounded-xl bg-accent hover:bg-accent/90 text-white font-medium transition-all glow flex items-center justify-center gap-2">
+                        <span data-i18n="hero.viewSystems">View Systems</span>
                     </a>
-                    <button onclick="openContact()" class="px-8 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all cursor-hover hover:border-white/20">
-                        Contact Me
-                    </button>
+                    <button onclick="openContact()" class="px-8 py-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all hover:border-white/20" data-i18n="hero.contactMe">Contact Me</button>
                 </div>
             </div>
             
-            <!-- Stats -->
             <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 reveal">
-                <div class="text-center group cursor-hover">
-                    <div class="text-3xl font-bold text-white mb-1 group-hover:text-accent transition-colors">7+</div>
-                    <div class="text-sm text-gray-500">Major Projects</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white mb-1">7+</div>
+                    <div class="text-sm text-gray-500" data-i18n="stats.majorProjects">Major Projects</div>
                 </div>
-                <div class="text-center group cursor-hover">
-                    <div class="text-3xl font-bold text-white mb-1 group-hover:text-accent transition-colors">5+</div>
-                    <div class="text-sm text-gray-500">Years Experience</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white mb-1">5+</div>
+                    <div class="text-sm text-gray-500" data-i18n="stats.yearsExperience">Years Experience</div>
                 </div>
-                <div class="text-center group cursor-hover">
-                    <div class="text-3xl font-bold text-white mb-1 group-hover:text-accent transition-colors">100%</div>
-                    <div class="text-sm text-gray-500">Self Taught</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white mb-1">100%</div>
+                    <div class="text-sm text-gray-500" data-i18n="stats.selfTaught">Self Taught</div>
                 </div>
-                <div class="text-center group cursor-hover">
-                    <div class="text-3xl font-bold text-white mb-1 group-hover:text-accent transition-colors">∞</div>
-                    <div class="text-sm text-gray-500">Curiosity</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white mb-1">∞</div>
+                    <div class="text-sm text-gray-500" data-i18n="stats.curiosity">Curiosity</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="py-32 relative">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="reveal">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Engineering Philosophy</h2>
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6" data-i18n="about.title">Engineering Philosophy</h2>
                     <div class="space-y-4 text-gray-400 leading-relaxed">
-                        <p>
-                            I started programming from pure curiosity about how systems work — inspired by tech culture and the desire to understand what happens beneath the surface. With no formal education, no courses, and no corporate background, I taught myself everything from open online resources.
-                        </p>
-                        <p>
-                            My journey progressed from experimentation to structured engineering: from writing simple utilities to building complete systems that handle automation, hardware integration, and security analysis.
-                        </p>
+                        <p data-i18n="about.p1">I started programming from pure curiosity about how systems work — inspired by tech culture and the desire to understand what happens beneath the surface. With no formal education, no courses, and no corporate background, I taught myself everything from open online resources.</p>
+                        <p data-i18n="about.p2">My journey progressed from experimentation to structured engineering: from writing simple utilities to building complete systems that handle automation, hardware integration, and security analysis.</p>
                         <div class="pt-4 space-y-3">
-                            <div class="flex items-center gap-3 group cursor-hover">
-                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
                                     <svg class="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
-                                <span class="text-sm text-gray-300">Building from scratch with full system control</span>
+                                <span class="text-sm text-gray-300" data-i18n="about.point1">Building from scratch with full system control</span>
                             </div>
-                            <div class="flex items-center gap-3 group cursor-hover">
-                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
                                     <svg class="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
-                                <span class="text-sm text-gray-300">Understanding internal mechanics over abstractions</span>
+                                <span class="text-sm text-gray-300" data-i18n="about.point2">Understanding internal mechanics over abstractions</span>
                             </div>
-                            <div class="flex items-center gap-3 group cursor-hover">
-                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center group-hover:bg-accent/30 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">
                                     <svg class="w-3 h-3 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
-                                <span class="text-sm text-gray-300">Hardware integration: Arduino, ESP32, RF systems</span>
+                                <span class="text-sm text-gray-300" data-i18n="about.point3">Hardware integration: Arduino, ESP32, RF systems</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Interactive Skills Graph -->
-                <div class="reveal glass rounded-2xl p-8 relative overflow-hidden group hover:border-accent/20 transition-colors">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl group-hover:bg-accent/20 transition-colors"></div>
-                    <h3 class="text-lg font-semibold mb-6 flex items-center gap-2">
+                <div class="reveal glass rounded-2xl p-8 relative overflow-hidden">
+                    <h3 class="text-lg font-semibold mb-6 flex items-center gap-2" data-i18n="about.skillsTitle">
                         <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
                         Current Focus Areas
                     </h3>
-                    <div class="space-y-6" id="skills-container">
-                        <!-- Skill bars generated by JS -->
-                    </div>
+                    <div class="space-y-6" id="skills-container"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Systems / Repositories Section -->
-    <section id="systems" class="py-32 relative bg-darker repo-section-bg">
-        <!-- Animated Background Elements -->
-        <div class="hex-grid"></div>
-        <div class="floating-orb orb-1"></div>
-        <div class="floating-orb orb-2"></div>
-        <div class="floating-orb orb-3"></div>
-        
-        <!-- Data Particles -->
-        <div class="data-particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="data-particle" style="left: 30%; animation-delay: 5s;"></div>
-        <div class="data-particle" style="left: 50%; animation-delay: 10s;"></div>
-        <div class="data-particle" style="left: 70%; animation-delay: 15s;"></div>
-        <div class="data-particle" style="left: 90%; animation-delay: 7s;"></div>
-        
-        <!-- Scanning Lines -->
-        <div class="connection-line" style="top: 20%; animation-delay: 0s;"></div>
-        <div class="connection-line" style="top: 50%; animation-delay: 4s;"></div>
-        <div class="connection-line" style="top: 80%; animation-delay: 2s;"></div>
-        
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
+    <section id="systems" class="py-32 relative bg-darker">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-xs font-medium text-accent mb-4">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    7 Production Systems
+                    <span data-i18n="systems.badge">7 Production Systems</span>
                 </div>
-                <h2 class="text-3xl md:text-5xl font-bold mb-4 glow-text">Systems & Architectures</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Production-grade tools for security research, hardware analysis, and system automation. Each project represents a complete solution to complex engineering challenges.</p>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4" data-i18n="systems.title">Systems & Architectures</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg" data-i18n="systems.description">Production-grade tools for security research, hardware analysis, and system automation.</p>
             </div>
-
-            <div class="grid md:grid-cols-2 gap-6" id="repos-container">
-                <!-- Repository cards injected by JS -->
-            </div>
+            <div class="grid md:grid-cols-2 gap-6" id="repos-container"></div>
         </div>
     </section>
 
-    <!-- Tech Stack Visualization -->
-    <section id="stack" class="py-32 relative overflow-hidden">
+    <section id="stack" class="py-32 relative">
         <div class="max-w-6xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">Technology Stack</h2>
-                <p class="text-gray-400">Core technologies and tools I use to build reliable systems</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" data-i18n="stack.title">Technology Stack</h2>
+                <p class="text-gray-400" data-i18n="stack.description">Core technologies and tools I use to build reliable systems</p>
             </div>
-            
-            <div class="glass rounded-3xl p-8 md:p-12 reveal relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent-glow/5 pointer-events-none"></div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10" id="tech-grid">
-                    <!-- Tech items injected by JS -->
-                </div>
+            <div class="glass rounded-3xl p-8 md:p-12 reveal">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8" id="tech-grid"></div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Modal -->
     <div id="contact-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeContact()"></div>
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeContact()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-6">
-            <div class="glass-strong rounded-2xl p-8 max-w-md w-full relative transform scale-95 opacity-0 transition-all duration-300" id="contact-content">
-                <button onclick="closeContact()" class="absolute top-4 right-4 text-gray-400 hover:text-white cursor-hover transition-colors">
+            <div class="glass-strong rounded-2xl p-8 max-w-md w-full relative" id="contact-content">
+                <button onclick="closeContact()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
-                
-                <h3 class="text-2xl font-bold mb-2">Let's Connect</h3>
-                <p class="text-gray-400 mb-6">Open to interesting projects and technical discussions.</p>
-                
+                <h3 class="text-2xl font-bold mb-2" data-i18n="contact.title">Let's Connect</h3>
+                <p class="text-gray-400 mb-6" data-i18n="contact.subtitle">Open to interesting projects and technical discussions.</p>
                 <div class="space-y-4">
-                    <a href="https://github.com/tworjaga" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-hover group border border-transparent hover:border-white/10">
-                        <div class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <a href="https://github.com/tworjaga" target="_blank" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
+                        <div class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                         </div>
                         <div>
                             <div class="font-medium">GitHub</div>
                             <div class="text-sm text-gray-500">@tworjaga</div>
                         </div>
-                        <svg class="w-5 h-5 ml-auto text-gray-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
-                    
-                    <button onclick="copyEmail()" class="w-full flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-hover group border border-transparent hover:border-white/10 relative overflow-hidden">
-                        <div class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <button onclick="copyEmail()" class="w-full flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all relative overflow-hidden">
+                        <div class="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
                         <div class="text-left">
@@ -525,10 +221,7 @@
                             <div class="text-sm text-gray-500" id="email-text">Click to copy</div>
                         </div>
                         <div id="copy-feedback" class="absolute inset-0 bg-accent flex items-center justify-center translate-y-full transition-transform duration-300">
-                            <span class="font-medium flex items-center gap-2">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Copied!
-                            </span>
+                            <span class="font-medium">Copied!</span>
                         </div>
                     </button>
                 </div>
@@ -536,375 +229,116 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="py-12 border-t border-white/5 relative">
+    <footer class="py-12 border-t border-white/5">
         <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2">
                 <div class="w-6 h-6 rounded bg-gradient-to-br from-accent to-accent-glow flex items-center justify-center text-xs font-bold text-white font-mono">A</div>
-                <span class="text-sm text-gray-500">© 2024 Alexey. Built with precision.</span>
+                <span class="text-sm text-gray-500">2024 Alexey. Built with precision.</span>
             </div>
             <div class="flex gap-6 text-sm text-gray-500">
-                <a href="https://github.com/tworjaga" target="_blank" class="hover:text-white transition-colors cursor-hover">GitHub</a>
-                <button onclick="openContact()" class="hover:text-white transition-colors cursor-hover">Contact</button>
+                <a href="https://github.com/tworjaga" target="_blank" class="hover:text-white transition-colors">GitHub</a>
+                <button onclick="openContact()" class="hover:text-white transition-colors">Contact</button>
             </div>
         </div>
     </footer>
 
     <script>
-        // Custom Cursor
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
-        
-        window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
-            
-            cursorDot.style.left = `${posX}px`;
-            cursorDot.style.top = `${posY}px`;
-            
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
-        });
-        
-        document.querySelectorAll('.cursor-hover').forEach(el => {
-            el.addEventListener('mouseenter', () => cursorOutline.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hover'));
-        });
-
-        // Scroll Reveal
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+        // Translations
+        const translations = {
+            en: {
+                title: "Alexey | Systems & Security Engineer",
+                "nav.about": "About", "nav.systems": "Systems", "nav.stack": "Stack", "nav.contact": "Contact", "nav.getInTouch": "Get in Touch",
+                "hero.available": "Available for opportunities", "hero.building": "Building", "hero.reliableSystems": "reliable systems", "hero.through": "through methodical engineering",
+                "hero.description": "Mid-Level Software Engineer specializing in Backend, Systems, and Security. Self-taught, hardware-curious, and driven by understanding what happens beneath the surface.",
+                "hero.viewSystems": "View Systems", "hero.contactMe": "Contact Me",
+                "stats.majorProjects": "Major Projects", "stats.yearsExperience": "Years Experience", "stats.selfTaught": "Self Taught", "stats.curiosity": "Curiosity",
+                "about.title": "Engineering Philosophy",
+                "about.p1": "I started programming from pure curiosity about how systems work — inspired by tech culture and the desire to understand what happens beneath the surface. With no formal education, no courses, and no corporate background, I taught myself everything from open online resources.",
+                "about.p2": "My journey progressed from experimentation to structured engineering: from writing simple utilities to building complete systems that handle automation, hardware integration, and security analysis.",
+                "about.point1": "Building from scratch with full system control", "about.point2": "Understanding internal mechanics over abstractions", "about.point3": "Hardware integration: Arduino, ESP32, RF systems",
+                "about.skillsTitle": "Current Focus Areas",
+                "systems.badge": "7 Production Systems", "systems.title": "Systems & Architectures",
+                "systems.description": "Production-grade tools for security research, hardware analysis, and system automation. Each project represents a complete solution to complex engineering challenges.",
+                "stack.title": "Technology Stack", "stack.description": "Core technologies and tools I use to build reliable systems",
+                "contact.title": "Let's Connect", "contact.subtitle": "Open to interesting projects and technical discussions."
+            },
+            ru: {
+                title: "Алексей | Инженер систем и безопасности",
+                "nav.about": "Обо мне", "nav.systems": "Системы", "nav.stack": "Стек", "nav.contact": "Контакты", "nav.getInTouch": "Связаться",
+                "hero.available": "Открыт для предложений", "hero.building": "Создаю", "hero.reliableSystems": "надежные системы", "hero.through": "через методичную инженерию",
+                "hero.description": "Middle Software Engineer, специализирующийся на бэкенде, системах и безопасности. Самоучка, увлекаюсь железом, стремлюсь понять, что происходит под капотом.",
+                "hero.viewSystems": "Смотреть системы", "hero.contactMe": "Написать мне",
+                "stats.majorProjects": "Крупных проектов", "stats.yearsExperience": "Лет опыта", "stats.selfTaught": "Самоучка", "stats.curiosity": "Любопытство",
+                "about.title": "Философия инженерии",
+                "about.p1": "Я начал программировать из чистого любопытства о том, как работают системы — вдохновленный технической культурой и желанием понять, что происходит под поверхностью. Без формального образования, курсов и корпоративного бэкграунда я научился всему из открытых онлайн-ресурсов.",
+                "about.p2": "Мой путь прошел от экспериментов к структурированной инженерии: от написания простых утилит до создания полноценных систем, которые управляют автоматизацией, интеграцией железа и анализом безопасности.",
+                "about.point1": "Создание с нуля с полным контролем системы", "about.point2": "Понимание внутренней механики вместо абстракций", "about.point3": "Интеграция железа: Arduino, ESP32, RF системы",
+                "about.skillsTitle": "Текущие направления",
+                "systems.badge": "7 продакшн систем", "systems.title": "Системы и архитектуры",
+                "systems.description": "Инструменты уровня продакшн для исследований безопасности, анализа железа и автоматизации систем. Каждый проект — полноценное решение сложных инженерных задач.",
+                "stack.title": "Технологический стек", "stack.description": "Ключевые технологии и инструменты для создания надежных систем",
+                "contact.title": "Давайте общаться", "contact.subtitle": "Открыт для интересных проектов и технических дискуссий."
+            },
+            de: {
+                title: "Alexey | System- und Sicherheitsingenieur",
+                "nav.about": "Über mich", "nav.systems": "Systeme", "nav.stack": "Stack", "nav.contact": "Kontakt", "nav.getInTouch": "Kontakt aufnehmen",
+                "hero.available": "Verfügbar für Möglichkeiten", "hero.building": "Aufbau von", "hero.reliableSystems": "zuverlässigen Systemen", "hero.through": "durch methodische Ingenieurskunst",
+                "hero.description": "Mid-Level Software Engineer mit Spezialisierung auf Backend, Systeme und Sicherheit. Autodidakt, hardware-interessiert, angetrieben vom Verständnis dessen, was unter der Oberfläche passiert.",
+                "hero.viewSystems": "Systeme ansehen", "hero.contactMe": "Kontaktieren Sie mich",
+                "stats.majorProjects": "Große Projekte", "stats.yearsExperience": "Jahre Erfahrung", "stats.selfTaught": "Autodidakt", "stats.curiosity": "Neugier",
+                "about.title": "Ingenieurphilosophie",
+                "about.p1": "Ich begann zu programmieren aus reiner Neugier, wie Systeme funktionieren — inspiriert von Technikkultur und dem Wunsch zu verstehen, was unter der Oberfläche passiert. Ohne formale Ausbildung, Kurse und Unternehmenshintergrund habe ich mir alles aus offenen Online-Ressourcen beigebracht.",
+                "about.p2": "Meine Reise ging von Experimenten zu strukturierter Ingenieurskunst: vom Schreiben einfacher Dienstprogramme bis zum Bau kompletter Systeme, die Automatisierung, Hardware-Integration und Sicherheitsanalyse handhaben.",
+                "about.point1": "Aufbau von Grund auf mit voller Systemkontrolle", "about.point2": "Verständnis interner Mechanik statt Abstraktionen", "about.point3": "Hardware-Integration: Arduino, ESP32, RF-Systeme",
+                "about.skillsTitle": "Aktuelle Schwerpunkte",
+                "systems.badge": "7 Produktionssysteme", "systems.title": "Systeme & Architekturen",
+                "systems.description": "Produktionsreife Tools für Sicherheitsforschung, Hardware-Analyse und Systemautomatisierung. Jedes Projekt repräsentiert eine komplette Lösung komplexer Ingenieursherausforderungen.",
+                "stack.title": "Technologie-Stack", "stack.description": "Kern-Technologien und Tools für zuverlässige Systeme",
+                "contact.title": "Lassen Sie uns verbinden", "contact.subtitle": "Offen für interessante Projekte und technische Diskussionen."
+            },
+            zh: {
+                title: "Alexey | 系统与安全工程师",
+                "nav.about": "关于", "nav.systems": "系统", "nav.stack": "技术栈", "nav.contact": "联系", "nav.getInTouch": "联系我",
+                "hero.available": "寻找机会中", "hero.building": "构建", "hero.reliableSystems": "可靠的系统", "hero.through": "通过系统化工程",
+                "hero.description": "中级软件工程师，专注于后端、系统和安全领域。自学成才，对硬件充满好奇，致力于理解系统底层原理。",
+                "hero.viewSystems": "查看系统", "hero.contactMe": "联系我",
+                "stats.majorProjects": "主要项目", "stats.yearsExperience": "年经验", "stats.selfTaught": "自学成才", "stats.curiosity": "好奇心",
+                "about.title": "工程理念",
+                "about.p1": "我出于纯粹的好奇心开始编程——受技术文化启发，渴望理解系统表面之下的运作原理。没有正规教育背景，没有参加课程，也没有企业工作经验，我通过开放的在线资源自学了一切。",
+                "about.p2": "我的旅程从实验走向结构化工程：从编写简单工具到构建处理自动化、硬件集成和安全分析的完整系统。",
+                "about.point1": "从零开始构建，完全控制系统", "about.point2": "理解内部机制而非抽象概念", "about.point3": "硬件集成：Arduino、ESP32、RF系统",
+                "about.skillsTitle": "当前重点领域",
+                "systems.badge": "7个生产系统", "systems.title": "系统与架构",
+                "systems.description": "用于安全研究、硬件分析和系统自动化的生产级工具。每个项目都代表了对复杂工程挑战的完整解决方案。",
+                "stack.title": "技术栈", "stack.description": "我用来构建可靠系统的核心技术和工具",
+                "contact.title": "让我们联系", "contact.subtitle": "对有趣的项目和技术讨论持开放态度。"
+            }
         };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.getElementById('current-lang').textContent = lang.toUpperCase();
+            document.querySelectorAll('.lang-option').forEach(el => {
+                el.classList.toggle('active', el.dataset.lang === lang);
+            });
+            updateTranslations();
+        }
+
+        function updateTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    el.textContent = translations[currentLang][key];
                 }
             });
-        }, observerOptions);
-        
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
 
-        // Skills Data & Visualization
+        // Skills Data
         const skills = [
             { name: 'System Design', level: 85, color: '#5e6ad2' },
             { name: 'Security Research', level: 90, color: '#ec4899' },
             { name: 'Rust (Systems)', level: 75, color: '#dea584' },
-            { name: 'Python (Automation)', level: 95, color: '#3776ab' },
-            { name: 'Hardware/RF', level: 88, color: '#f59e0b' },
-            { name: 'Network Analysis', level: 82, color: '#10b981' }
-        ];
-        
-        const skillsContainer = document.getElementById('skills-container');
-        skills.forEach((skill, index) => {
-            const div = document.createElement('div');
-            div.className = 'relative group cursor-hover';
-            div.innerHTML = `
-                <div class="flex justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">${skill.name}</span>
-                    <span class="text-sm text-gray-500 group-hover:text-accent transition-colors">${skill.level}%</span>
-                </div>
-                <div class="h-2 bg-white/5 rounded-full overflow-hidden">
-                    <div class="h-full rounded-full transition-all duration-1000 ease-out relative" 
-                         style="width: 0%; background: ${skill.color}; box-shadow: 0 0 20px ${skill.color}40;"
-                         data-width="${skill.level}%">
-                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
-                    </div>
-                </div>
-            `;
-            skillsContainer.appendChild(div);
-            
-            setTimeout(() => {
-                div.querySelector('[data-width]').style.width = skill.level + '%';
-            }, 200 + (index * 100));
-        });
-
-        // Repository Data with Professional Descriptions
-        const repositories = [
-            {
-                name: 'Cherenkov',
-                description: 'Real-time global radiological intelligence platform aggregating 10,000+ sensors worldwide. Detects anomalies in milliseconds using Rust-powered stream processing and predicts fallout dispersion with ML models. Zero-cost architecture with WebAssembly frontend, operating entirely on free-tier infrastructure.',
-                tags: ['Rust', 'WebAssembly', 'Real-time', 'ML', 'IoT'],
-                metrics: {
-                    complexity: 95,
-                    reliability: 98,
-                    performance: 99
-                },
-                chartData: [20, 45, 70, 85, 95, 98, 99, 100],
-                features: ['Sub-millisecond anomaly detection', 'Global sensor mesh aggregation', 'Fallout dispersion prediction', 'Zero-cost scaling architecture', 'WebAssembly real-time visualization'],
-                color: '#dea584',
-                icon: '⚡'
-            },
-            {
-                name: 'SecureMySite',
-                description: 'Local-first desktop security analyzer for AI-generated web projects. Performs 100% offline SAST/DAST scanning with intelligent severity scoring and AI-powered fix generation. PyQt6 interface ensures zero cloud dependency, zero telemetry—complete privacy for sensitive codebases.',
-                tags: ['Python', 'PyQt6', 'Security', 'SAST/DAST', 'AI'],
-                metrics: {
-                    complexity: 78,
-                    reliability: 95,
-                    performance: 88
-                },
-                chartData: [30, 50, 65, 75, 82, 88, 92, 95],
-                features: ['Offline vulnerability scanning', 'AI-generated security fixes', 'PyQt6 native desktop GUI', 'Zero cloud dependencies', 'Multi-framework support'],
-                color: '#3776ab',
-                icon: '🛡️'
-            },
-            {
-                name: 'PivotMap',
-                description: 'Attack path intelligence engine for offensive security teams. Ingests network scan results, correlates vulnerabilities across the infrastructure, builds directed attack graphs, and identifies realistic compromise paths. Transforms raw scan data into actionable breach scenarios.',
-                tags: ['Python', 'Graph Theory', 'Security', 'Network', 'Analysis'],
-                metrics: {
-                    complexity: 92,
-                    reliability: 90,
-                    performance: 85
-                },
-                chartData: [25, 40, 60, 70, 80, 85, 88, 92],
-                features: ['Directed attack graph construction', 'Vulnerability correlation engine', 'Path-to-compromise analysis', 'Network topology visualization', 'Automated exploit chain detection'],
-                color: '#ec4899',
-                icon: '🎯'
-            },
-            {
-                name: 'BlueScope',
-                description: 'Professional Bluetooth monitoring and security platform with ML-powered anomaly detection. Real-time BLE traffic analysis, signal fingerprinting, and comprehensive security auditing. PyQt6 interface provides lab-grade Bluetooth surveillance capabilities for IoT security research.',
-                tags: ['Python', 'PyQt6', 'Bluetooth', 'ML', 'IoT Security'],
-                metrics: {
-                    complexity: 88,
-                    reliability: 92,
-                    performance: 90
-                },
-                chartData: [35, 55, 65, 75, 82, 87, 90, 93],
-                features: ['Real-time BLE traffic analysis', 'ML anomaly detection', 'Device fingerprinting', 'Signal duplication detection', 'Comprehensive audit logging'],
-                color: '#3b82f6',
-                icon: '📡'
-            },
-            {
-                name: 'FlowScope',
-                description: 'Flow-based network traffic analysis and anomaly investigation tool. Captures and analyzes network flows to detect unusual patterns, bandwidth anomalies, and potential security incidents. Designed for deep network visibility without overwhelming data overhead.',
-                tags: ['Python', 'Networking', 'Analysis', 'Security', 'Monitoring'],
-                metrics: {
-                    complexity: 75,
-                    reliability: 90,
-                    performance: 88
-                },
-                chartData: [40, 55, 65, 72, 78, 82, 86, 90],
-                features: ['Flow-based traffic analysis', 'Anomaly pattern detection', 'Bandwidth utilization tracking', 'Protocol distribution analysis', 'Lightweight resource usage'],
-                color: '#10b981',
-                icon: '🌊'
-            },
-            {
-                name: 'Flipper RF Lab',
-                description: 'Advanced RF analysis platform for Flipper Zero devices. 15 professional features including device fingerprinting, protocol detection, threat modeling, and spectrum monitoring. Lab-grade timing precision under 1 microsecond, written in pure C with static memory allocation.',
-                tags: ['C', 'Flipper Zero', 'RF', 'Hardware', 'Embedded'],
-                metrics: {
-                    complexity: 90,
-                    reliability: 95,
-                    performance: 98
-                },
-                chartData: [30, 50, 70, 80, 88, 92, 95, 98],
-                features: ['Sub-microsecond timing precision', '15 RF analysis modules', 'Protocol auto-detection', 'Static memory management', 'Device fingerprinting database'],
-                color: '#f59e0b',
-                icon: '📻'
-            },
-            {
-                name: 'Keyspace',
-                description: 'Cross-platform password auditing toolkit for authorized security testing. PyQt6 graphical interface with modular backend supporting multiple attack vectors. Designed for legitimate penetration testing and security research with comprehensive logging and reporting.',
-                tags: ['Python', 'PyQt6', 'Security', 'Cryptography', 'Testing'],
-                metrics: {
-                    complexity: 72,
-                    reliability: 94,
-                    performance: 86
-                },
-                chartData: [45, 60, 68, 75, 80, 85, 89, 94],
-                features: ['Multi-vector attack support', 'Cross-platform compatibility', 'PyQt6 modern interface', 'Comprehensive audit logging', 'Modular plugin architecture'],
-                color: '#8b5cf6',
-                icon: '🔐'
-            }
-        ];
-
-        // Generate Repository Cards with Charts
-        const reposContainer = document.getElementById('repos-container');
-        repositories.forEach((repo, index) => {
-            const card = document.createElement('div');
-            card.className = 'repo-card glass rounded-2xl p-6 md:p-8 reveal border border-white/5 hover:border-white/10 relative overflow-hidden group';
-            
-            // Generate SVG Chart
-            const chartHeight = 60;
-            const chartWidth = 200;
-            const maxVal = Math.max(...repo.chartData);
-            const points = repo.chartData.map((val, i) => {
-                const x = (i / (repo.chartData.length - 1)) * chartWidth;
-                const y = chartHeight - ((val / maxVal) * chartHeight);
-                return `${x},${y}`;
-            }).join(' ');
-            
-            card.innerHTML = `
-                <div class="absolute top-0 right-0 w-32 h-32 opacity-10 group-hover:opacity-20 transition-opacity" style="background: radial-gradient(circle, ${repo.color} 0%, transparent 70%);"></div>
-                
-                <div class="flex flex-col h-full relative z-10">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="flex-1">
-                            <div class="flex items-center gap-3 mb-2">
-                                <span class="text-2xl">${repo.icon}</span>
-                                <h3 class="text-xl font-bold text-white group-hover:text-[${repo.color}] transition-colors">${repo.name}</h3>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                ${repo.tags.map(tag => `<span class="px-2 py-1 rounded-md bg-white/5 text-xs text-gray-400 border border-white/5 hover:border-[${repo.color}]/30 hover:text-white transition-colors cursor-default">${tag}</span>`).join('')}
-                            </div>
-                        </div>
-                        <div class="w-24 h-16 ml-4">
-                            <svg viewBox="0 0 200 60" class="w-full h-full overflow-visible">
-                                <defs>
-                                    <linearGradient id="gradient-${index}" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style="stop-color:${repo.color};stop-opacity:0.3" />
-                                        <stop offset="100%" style="stop-color:${repo.color};stop-opacity:0" />
-                                    </linearGradient>
-                                </defs>
-                                <path d="M0,60 ${points} 200,60 Z" fill="url(#gradient-${index})" class="opacity-0 animate-[fadeIn_1s_ease-out_forwards]" style="animation-delay: ${index * 0.2}s"/>
-                                <polyline points="${points}" fill="none" stroke="${repo.color}" stroke-width="2" class="chart-line" style="animation-delay: ${index * 0.2}s"/>
-                                ${repo.chartData.map((val, i) => {
-                                    const x = (i / (repo.chartData.length - 1)) * chartWidth;
-                                    const y = chartHeight - ((val / maxVal) * chartHeight);
-                                    return `<circle cx="${x}" cy="${y}" r="3" fill="${repo.color}" class="opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]" style="animation-delay: ${(index * 0.2) + (i * 0.1)}s"/>`;
-                                }).join('')}
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <p class="text-gray-400 text-sm mb-6 leading-relaxed flex-grow">${repo.description}</p>
-                    
-                    <div class="grid grid-cols-3 gap-4 mb-6">
-                        ${Object.entries(repo.metrics).map(([key, val], i) => `
-                            <div class="text-center group/metric cursor-hover">
-                                <div class="relative w-16 h-16 mx-auto mb-2">
-                                    <svg class="w-full h-full transform -rotate-90">
-                                        <circle cx="32" cy="32" r="28" stroke="rgba(255,255,255,0.1)" stroke-width="4" fill="none"/>
-                                        <circle cx="32" cy="32" r="28" stroke="${i === 0 ? repo.color : i === 1 ? '#10b981' : '#f59e0b'}" 
-                                                stroke-width="4" fill="none" stroke-dasharray="${2 * Math.PI * 28}" 
-                                                stroke-dashoffset="${2 * Math.PI * 28 * (1 - val/100)}"
-                                                class="metric-progress transition-all duration-1000 group-hover/metric:stroke-width-6"
-                                                style="transition-delay: ${index * 200 + i * 100}ms"/>
-                                    </svg>
-                                    <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white">${val}</span>
-                                </div>
-                                <div class="text-xs text-gray-500 capitalize">${key}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="space-y-2 border-t border-white/5 pt-4">
-                        ${repo.features.map(feat => `
-                            <div class="flex items-center gap-2 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
-                                <div class="w-1.5 h-1.5 rounded-full" style="background: ${repo.color}; box-shadow: 0 0 5px ${repo.color}"></div>
-                                ${feat}
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="mt-6 flex gap-3">
-                        <a href="https://github.com/tworjaga/${repo.name}" target="_blank" class="flex-1 py-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-center text-sm font-medium transition-all cursor-hover hover:border-[${repo.color}]/30 flex items-center justify-center gap-2 group/btn">
-                            View Source
-                            <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            `;
-            reposContainer.appendChild(card);
-        });
-
-        // Tech Stack Data
-        const technologies = [
-            { name: 'Rust', icon: 'Rs', color: '#dea584', desc: 'Systems & Performance' },
-            { name: 'Python', icon: 'Py', color: '#3776ab', desc: 'Automation & Security' },
-            { name: 'C/C++', icon: 'C', color: '#00599c', desc: 'Embedded & Hardware' },
-            { name: 'Go', icon: 'Go', color: '#00ADD8', desc: 'Backend Services' },
-            { name: 'Bluetooth', icon: 'BT', color: '#0082fc', desc: 'BLE & Protocols' },
-            { name: 'RF/SDR', icon: 'RF', color: '#f59e0b', desc: 'Radio Frequency' },
-            { name: 'Docker', icon: 'Dx', color: '#2496ED', desc: 'Containerization' },
-            { name: 'Linux', icon: 'Ln', color: '#fcc624', desc: 'System Administration' }
-        ];
-
-        const techGrid = document.getElementById('tech-grid');
-        technologies.forEach((tech, index) => {
-            const div = document.createElement('div');
-            div.className = 'group text-center cursor-hover';
-            div.innerHTML = `
-                <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl font-bold transition-all duration-300 group-hover:scale-110 group-hover:border-[${tech.color}]/50 group-hover:shadow-lg group-hover:shadow-[${tech.color}]/20 relative overflow-hidden">
-                    <div class="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity" style="background: ${tech.color}"></div>
-                    <span class="relative z-10" style="color: ${tech.color}; text-shadow: 0 0 20px ${tech.color}40;">${tech.icon}</span>
-                </div>
-                <div class="font-medium text-sm mb-1 group-hover:text-white transition-colors">${tech.name}</div>
-                <div class="text-xs text-gray-500 group-hover:text-gray-400 transition-colors">${tech.desc}</div>
-            `;
-            techGrid.appendChild(div);
-        });
-
-        // Contact Modal Functions
-        function openContact() {
-            const modal = document.getElementById('contact-modal');
-            const content = document.getElementById('contact-content');
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeContact() {
-            const modal = document.getElementById('contact-modal');
-            const content = document.getElementById('contact-content');
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            }, 300);
-        }
-
-        function copyEmail() {
-            const email = 'tworjaga@gmail.com';
-            navigator.clipboard.writeText(email).then(() => {
-                const feedback = document.getElementById('copy-feedback');
-                feedback.classList.remove('translate-y-full');
-                setTimeout(() => {
-                    feedback.classList.add('translate-y-full');
-                }, 2000);
-            });
-        }
-
-        // Navbar scroll effect
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.classList.add('glass-strong');
-                navbar.classList.remove('glass');
-            } else {
-                navbar.classList.remove('glass-strong');
-                navbar.classList.add('glass');
-            }
-            
-            lastScroll = currentScroll;
-        });
-
-        // Add fadeIn keyframe and shimmer
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            @keyframes shimmer {
-                100% { transform: translateX(100%); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
-</body>
-</html>
+            { name: 'Python
