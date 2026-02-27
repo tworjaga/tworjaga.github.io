@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureMySite | Local Security Analyzer for AI-Generated Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg-primary:#0a0e1a;--bg-secondary:#001a33;--bg-card:rgba(0,26,51,0.6);--accent:#00d2ff;--accent-glow:rgba(0,210,255,0.3);--text-primary:#ffffff;--text-secondary:#a0aec0;--text-muted:#64748b;--danger:#ff4757;--warning:#ff8800;--success:#00d084;--border:rgba(0,210,255,0.2)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:var(--bg-primary);color:var(--text-primary);line-height:1.6;overflow-x:hidden}
+        ::-webkit-scrollbar{width:8px}
+        ::-webkit-scrollbar-track{background:var(--bg-primary)}
+        ::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+        .nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2rem;background:rgba(10,14,26,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all 0.3s ease}
+        .nav.scrolled{padding:0.75rem 2rem;background:rgba(10,14,26,0.95)}
+        .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+        .logo{display:flex;align-items:center;gap:0.75rem;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.25rem;color:var(--text-primary);text-decoration:none}
+        .logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),#0088cc);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--accent-glow)}
+        .logo-icon svg{width:24px;height:24px;fill:white}
+        .nav-links{display:flex;gap:2rem;list-style:none}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-weight:500;transition:color 0.3s ease;position:relative}
+        .nav-links a:hover{color:var(--accent)}
+        .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width 0.3s ease}
+        .nav-links a:hover::after{width:100%}
+        .nav-cta{padding:0.75rem 1.5rem;border:1px solid var(--accent);background:transparent;color:var(--accent);font-family:'Inter',sans-serif;font-weight:600;border-radius:6px;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem}
+        .nav-cta:hover{background:var(--accent);color:var(--bg-primary);box-shadow:0 0 20px var(--accent-glow)}
+        .lang-toggle{display:flex;gap:0.5rem;align-items:center;margin-left:1rem;padding-left:1rem;border-left:1px solid var(--border)}
+        .lang-btn{padding:0.4rem 0.75rem;background:transparent;border:1px solid var(--border);color:var(--text-secondary);font-family:'Inter',sans-serif;font-size:0.875rem;font-weight:500;border-radius:4px;cursor:pointer;transition:all 0.3s ease}
+        .lang-btn:hover{border-color:var(--accent);color:var(--accent)}
+        .lang-btn.active{background:var(--accent);color:var(--bg-primary);border-color:var(--accent)}
+
+        .hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2rem 4rem;position:relative;overflow:hidden}
+        #particles-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0}
+        .hero-grid{position:absolute;top:0;left:0;width:100%;height:100%;background-image:linear-gradient(rgba(0,210,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,0.03) 1px,transparent 1px);background-size:50px 50px;z-index:1}
+        .hero-container{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;z-index:2}
+        .hero-content{animation:fadeUp 0.8s ease forwards}
+        .hero-tag{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.875rem;color:var(--accent);margin-bottom:1.5rem}
+        .hero-tag::before{content:'';width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+        .hero h1{font-size:4rem;font-weight:800;line-height:1.1;margin-bottom:1.5rem;background:linear-gradient(135deg,var(--text-primary) 0%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero p{font-size:1.25rem;color:var(--text-secondary);margin-bottom:2rem;max-width:600px}
+        .hero-stats{display:flex;gap:3rem;margin-bottom:2.5rem}
+        .stat{text-align:left}
+        .stat-value{font-family:'JetBrains Mono',monospace;font-size:2.5rem;font-weight:700;color:var(--accent);display:block}
+        .stat-label{font-size:0.875rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em}
+        .hero-buttons{display:flex;gap:1rem}
+        .btn-primary{padding:1rem 2rem;background:var(--accent);color:var(--bg-primary);font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;border:none;border-radius:6px;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem}
+        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px var(--accent-glow)}
+        .btn-secondary{padding:1rem 2rem;background:transparent;color:var(--text-primary);font-family:'Inter',sans-serif;font-weight:600;font-size:1rem;border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:all 0.3s ease;text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem}
+        .btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+        .hero-visual{position:relative;display:flex;justify-content:center;align-items:center;animation:fadeUp 0.8s ease 0.2s forwards;opacity:0}
+        .shield-container{position:relative;width:400px;height:400px}
+        .shield{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;background:linear-gradient(135deg,rgba(0,210,255,0.1),rgba(0,136,204,0.05));border:2px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px var(--accent-glow),inset 0 0 60px rgba(0,210,255,0.1);animation:float 6s ease-in-out infinite}
+        .shield svg{width:120px;height:120px;fill:var(--accent);filter:drop-shadow(0 0 20px var(--accent))}
+        .shield-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:1px solid rgba(0,210,255,0.3);border-radius:50%;animation:rotate 20s linear infinite}
+        .shield-ring:nth-child(1){width:350px;height:350px;animation-duration:30s;border-style:dashed}
+        .shield-ring:nth-child(2){width:320px;height:320px;animation-duration:25s;animation-direction:reverse}
+        .shield-ring:nth-child(3){width:380px;height:380px;animation-duration:35s;border-color:rgba(0,210,255,0.15)}
+        .scan-line{position:absolute;width:2px;height:100px;background:linear-gradient(to bottom,transparent,var(--accent),transparent);animation:scan 3s ease-in-out infinite}
+        .architecture{padding:6rem 2rem;background:linear-gradient(180deg,var(--bg-primary) 0%,var(--bg-secondary) 100%)}
+        .section-container{max-width:1400px;margin:0 auto}
+        .section-header{text-align:center;margin-bottom:4rem}
+        .section-tag{display:inline-block;padding:0.5rem 1rem;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.875rem;color:var(--accent);margin-bottom:1rem}
+        .section-header h2{font-size:2.5rem;font-weight:800;margin-bottom:1rem}
+        .section-header p{color:var(--text-secondary);max-width:600px;margin:0 auto}
+        .scanner-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+        .scanner-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:2rem;transition:all 0.3s ease;position:relative;overflow:hidden}
+        .scanner-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);transform:translateX(-100%);transition:transform 0.6s ease}
+        .scanner-card:hover{transform:translateY(-5px);border-color:var(--accent);box-shadow:0 20px 40px rgba(0,0,0,0.3),0 0 30px var(--accent-glow)}
+        .scanner-card:hover::before{transform:translateX(100%)}
+        .scanner-icon{width:56px;height:56px;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-size:1.5rem}
+        .scanner-card h3{font-size:1.25rem;font-weight:600;margin-bottom:0.75rem}
+        .scanner-card p{color:var(--text-secondary);font-size:0.95rem;margin-bottom:1.5rem}
+        .scanner-metrics{display:flex;gap:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+        .scanner-metric{font-family:'JetBrains Mono',monospace;font-size:0.875rem}
+        .scanner-metric span{color:var(--accent);font-weight:700}
+        .scanner-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem}
+        .tag{padding:0.25rem 0.75rem;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent)}
+        .features{padding:6rem 2rem;background:var(--bg-primary)}
+        .feature-row{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-bottom:6rem}
+        .feature-row:last-child{margin-bottom:0}
+        .feature-row.reverse{direction:rtl}
+        .feature-row.reverse > *{direction:ltr}
+        .feature-visual{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+        .terminal-header{display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border)}
+        .terminal-dot{width:12px;height:12px;border-radius:50%}
+        .terminal-dot.red{background:var(--danger)}
+        .terminal-dot.yellow{background:var(--warning)}
+        .terminal-dot.green{background:var(--success)}
+        .terminal-title{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--text-muted)}
+        .terminal-body{padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.875rem;line-height:1.8}
+        .terminal-line{display:flex;gap:0.5rem;margin-bottom:0.5rem;opacity:0;animation:fadeIn 0.5s ease forwards}
+        .terminal-line:nth-child(1){animation-delay:0.1s}
+        .terminal-line:nth-child(2){animation-delay:0.2s}
+        .terminal-line:nth-child(3){animation-delay:0.3s}
+        .terminal-line:nth-child(4){animation-delay:0.4s}
+        .terminal-line:nth-child(5){animation-delay:0.5s}
+        .terminal-prompt{color:var(--accent)}
+        .terminal-text{color:var(--text-secondary)}
+        .terminal-text.success{color:var(--success)}
+        .terminal-text.warning{color:var(--warning)}
+        .terminal-text.danger{color:var(--danger)}
+        .feature-content h3{font-size:2rem;font-weight:700;margin-bottom:1rem}
+        .feature-content p{color:var(--text-secondary);margin-bottom:1.5rem}
+        .feature-list{list-style:none}
+        .feature-list li{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.75rem;color:var(--text-secondary)}
+        .feature-list li::before{content:'→';color:var(--accent);font-weight:700}
+        .data-sources{padding:6rem 2rem;background:linear-gradient(180deg,var(--bg-secondary) 0%,var(--bg-primary) 100%)}
+        .sources-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+        .source-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;transition:all 0.3s ease}
+        .source-card:hover{border-color:var(--accent);transform:translateX(5px)}
+        .source-icon{width:64px;height:64px;margin:0 auto 1.5rem;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+        .source-card h4{font-size:1.125rem;font-weight:600;margin-bottom:0.5rem}
+        .source-card p{color:var(--text-secondary);font-size:0.875rem}
+        .cta{padding:6rem 2rem;background:var(--bg-primary);position:relative;overflow:hidden}
+        .cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
+        .cta-container{max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:1}
+        .cta h2{font-size:2.5rem;font-weight:800;margin-bottom:1rem}
+        .cta p{color:var(--text-secondary);margin-bottom:2rem}
+        .code-block{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:2rem;text-align:left;overflow-x:auto}
+        .code-block pre{font-family:'JetBrains Mono',monospace;font-size:0.875rem;color:var(--text-secondary);margin:0}
+        .code-block .comment{color:var(--text-muted)}
+        .code-block .keyword{color:#ff79c6}
+        .code-block .string{color:#f1fa8c}
+        .code-block .function{color:#8be9fd}
+        .footer{padding:3rem 2rem;background:var(--bg-secondary);border-top:1px solid var(--border)}
+        .footer-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+        .footer-links{display:flex;gap:2rem;list-style:none}
+        .footer-links a{color:var(--text-secondary);text-decoration:none;transition:color 0.3s ease}
+        .footer-links a:hover{color:var(--accent)}
+        .footer-copy{color:var(--text-muted);font-size:0.875rem}
+        .footer-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1rem;background:rgba(0,210,255,0.1);border:1px solid var(--border);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:var(--accent)}
+        @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+        @keyframes float{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-20px)}}
+        @keyframes rotate{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+        @keyframes scan{0%,100%{top:0;opacity:0}50%{opacity:1}100%{top:100%;opacity:0}}
+        .reveal{opacity:0;transform:translateY(30px);transition:all 0.6s ease}
+        .reveal.active{opacity:1;transform:translateY(0)}
+        @media(max-width:1024px){.hero-container{grid-template-columns:1fr;text-align:center}.hero-content{order:2}.hero-visual{order:1}.hero-stats{justify-content:center}.hero-buttons{justify-content:center}.hero h1{font-size:3rem}.feature-row{grid-template-columns:1fr}.feature-row.reverse{direction:ltr}}
+        @media(max-width:768px){.nav-links{display:none}.hero h1{font-size:2.5rem}.hero-stats{flex-direction:column;gap:1.5rem}.shield-container{width:280px;height:280px}.shield{width:200px;height:200px}.shield svg{width:80px;height:80px}.section-header h2{font-size:2rem}.footer-container{flex-direction:column;gap:1.5rem;text-align:center}}
+        @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+    </style>
+</head>
+<body>
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                </div>
+                SecureMySite
+            </a>
+            <ul class="nav-links">
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#docs">Docs</a></li>
+            </ul>
+            <a href="https://github.com/tworjaga/SecureMySite" class="nav-cta" target="_blank">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ru">RU</button>
+            </div>
+
+        </div>
+    </nav>
+
+    <section class="hero">
+        <canvas id="particles-canvas"></canvas>
+        <div class="hero-grid"></div>
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-tag" data-i18n="hero_tag">100% Offline Security Analysis</div>
+                <h1 data-i18n="hero_title">Secure Your Code Before Deployment</h1>
+                <p data-i18n="hero_desc">A fully offline, local desktop security analyzer for AI-generated web projects. Detect vulnerabilities through static analysis, dependency scanning, and configuration review.</p>
+                <div class="hero-stats">
+                    <div class="stat"><span class="stat-value">100+</span><span class="stat-label" data-i18n="stat_cves">CVEs Tracked</span></div>
+                    <div class="stat"><span class="stat-value">5</span><span class="stat-label" data-i18n="stat_scanners">Scanner Modules</span></div>
+                    <div class="stat"><span class="stat-value">0ms</span><span class="stat-label" data-i18n="stat_latency">Network Latency</span></div>
+                </div>
+                <div class="hero-buttons">
+                    <a href="https://github.com/tworjaga/SecureMySite" class="btn-primary" target="_blank">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <span data-i18n="btn_github">View on GitHub</span>
+                    </a>
+                    <a href="#architecture" class="btn-secondary" data-i18n="btn_explore">Explore Features</a>
+                </div>
+
+            </div>
+            <div class="hero-visual">
+                <div class="shield-container">
+                    <div class="shield-ring"></div>
+                    <div class="shield-ring"></div>
+                    <div class="shield-ring"></div>
+                    <div class="shield">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                    </div>
+                    <div class="scan-line" style="left:30%;animation-delay:0s"></div>
+                    <div class="scan-line" style="left:50%;animation-delay:1s"></div>
+                    <div class="scan-line" style="left:70%;animation-delay:2s"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="architecture" id="architecture">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-tag" data-i18n="arch_tag">Scanner Architecture</span>
+                <h2 data-i18n="arch_title">Five Specialized Detection Engines</h2>
+                <p data-i18n="arch_desc">Modular scanner architecture with dedicated engines for each attack surface. From code-level vulnerabilities to configuration errors.</p>
+            </div>
+
+            <div class="scanner-grid">
+                <div class="scanner-card reveal">
+                    <div class="scanner-icon">🐍</div>
+                    <h3 data-i18n="scanner_python_title">Python SAST</h3>
+                    <p data-i18n="scanner_python_desc">AST-based static analysis for Python code. Detects SQL injection, command injection, hardcoded secrets, and unsafe deserialization.</p>
+                    <div class="scanner-metrics"><div class="scanner-metric"><span>15+</span> <span data-i18n="metric_patterns">Patterns</span></div><div class="scanner-metric"><span>AST</span> <span data-i18n="metric_analysis">Analysis</span></div></div>
+                    <div class="scanner-tags"><span class="tag">eval/exec</span><span class="tag">SQLi</span><span class="tag">pickle</span></div>
+                </div>
+                <div class="scanner-card reveal">
+                    <div class="scanner-icon">⚡</div>
+                    <h3 data-i18n="scanner_js_title">JavaScript Scanner</h3>
+                    <p data-i18n="scanner_js_desc">Detects DOM XSS, eval() usage, localStorage token storage, exposed API keys, and CORS misconfigurations in JS/TS code.</p>
+                    <div class="scanner-metrics"><div class="scanner-metric"><span>10+</span> <span data-i18n="metric_patterns">Patterns</span></div><div class="scanner-metric"><span>DOM</span> XSS</div></div>
+                    <div class="scanner-tags"><span class="tag">innerHTML</span><span class="tag">eval</span><span class="tag">CORS</span></div>
+                </div>
+                <div class="scanner-card reveal">
+                    <div class="scanner-icon">⚙️</div>
+                    <h3 data-i18n="scanner_config_title">Config Scanner</h3>
+                    <p data-i18n="scanner_config_desc">Analyzes .env files, settings.py, and configuration files for debug mode, hardcoded secrets, and insecure cookie flags.</p>
+                    <div class="scanner-metrics"><div class="scanner-metric"><span>8+</span> <span data-i18n="metric_checks">Checks</span></div><div class="scanner-metric"><span>ENV</span> <span data-i18n="metric_scan">Scan</span></div></div>
+                    <div class="scanner-tags"><span class="tag">DEBUG</span><span class="tag">.env</span><span class="tag">secrets</span></div>
+                </div>
+                <div class="scanner-card reveal">
+                    <div class="scanner-icon">📦</div>
+                    <h3 data-i18n="scanner_dep_title">Dependency Scanner</h3>
+                    <p data-i18n="scanner_dep_desc">Scans requirements.txt and package.json against local vulnerability database with 100+ CVEs. No external API calls.</p>
+                    <div class="scanner-metrics"><div class="scanner-metric"><span>100+</span> CVEs</div><div class="scanner-metric"><span data-i18n="metric_offline">Offline</span> DB</div></div>
+                    <div class="scanner-tags"><span class="tag">pip</span><span class="tag">npm</span><span class="tag">CVE</span></div>
+                </div>
+                <div class="scanner-card reveal">
+                    <div class="scanner-icon">🌐</div>
+                    <h3 data-i18n="scanner_web_title">Web Scanner</h3>
+                    <p data-i18n="scanner_web_desc">Localhost-only dynamic analysis. Checks security headers, cookie flags, and endpoint security. No external URLs allowed.</p>
+                    <div class="scanner-metrics"><div class="scanner-metric"><span>12+</span> <span data-i18n="metric_headers">Headers</span></div><div class="scanner-metric"><span data-i18n="metric_local">Local</span> <span data-i18n="metric_only">Only</span></div></div>
+                    <div class="scanner-tags"><span class="tag">CSP</span><span class="tag">CORS</span><span class="tag">cookies</span></div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-tag" data-i18n="features_tag">Key Features</span>
+                <h2 data-i18n="features_title">Built for Security-First Development</h2>
+                <p data-i18n="features_desc">Every feature designed with privacy and efficiency in mind. No data leaves your machine.</p>
+            </div>
+
+            
+            <div class="feature-row reveal">
+                <div class="feature-visual">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-title">securemysite --scan</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-text">python main.py ./my-project</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Scanning 47 files...</span></div>
+                        <div class="terminal-line"><span class="terminal-text warning">⚠️  3 HIGH severity issues found</span></div>
+                        <div class="terminal-line"><span class="terminal-text danger">✗ 1 CRITICAL: Hardcoded API key</span></div>
+                        <div class="terminal-line"><span class="terminal-text success">✓ Report exported to report.html</span></div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3 data-i18n="feat_offline_title">100% Offline Operation</h3>
+                    <p data-i18n="feat_offline_desc">All analysis happens locally on your machine. No code, no files, no data ever leaves your system. Perfect for sensitive codebases and compliance requirements.</p>
+                    <ul class="feature-list">
+                        <li data-i18n="feat_offline_1">Local vulnerability database with 100+ CVEs</li>
+                        <li data-i18n="feat_offline_2">No external API dependencies</li>
+                        <li data-i18n="feat_offline_3">Air-gapped environment support</li>
+                        <li data-i18n="feat_offline_4">Zero network latency</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="feature-row reverse reveal">
+                <div class="feature-content">
+                    <h3 data-i18n="feat_ai_title">AI-Powered Fix Generation</h3>
+                    <p data-i18n="feat_ai_desc">Generate structured prompts for ChatGPT, Claude, or your preferred AI assistant. Each prompt includes context, vulnerable code, and specific remediation guidance.</p>
+                    <ul class="feature-list">
+                        <li data-i18n="feat_ai_1">Context-aware prompt building</li>
+                        <li data-i18n="feat_ai_2">Includes code snippets and line numbers</li>
+                        <li data-i18n="feat_ai_3">CWE references for security research</li>
+                        <li data-i18n="feat_ai_4">One-click copy to clipboard</li>
+                    </ul>
+                </div>
+
+                <div class="feature-visual">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-title">AI Fix Prompt</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-text">Fix the following security issue:</span></div>
+                        <div class="terminal-line"><span class="terminal-text">File: app.py:42</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Issue: SQL Injection (CWE-89)</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Code: cursor.execute(f"SELECT * FROM users WHERE id = {user_id}")</span></div>
+                        <div class="terminal-line"><span class="terminal-text success">→ Use parameterized queries</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-row reveal">
+                <div class="feature-visual">
+                    <div class="terminal-header">
+                        <div class="terminal-dot red"></div>
+                        <div class="terminal-dot yellow"></div>
+                        <div class="terminal-dot green"></div>
+                        <span class="terminal-title">Security Score: 73/100</span>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span class="terminal-text">Grade: B (Moderate Risk)</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Critical: 0 | High: 2 | Medium: 5 | Low: 3</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Files scanned: 47</span></div>
+                        <div class="terminal-line"><span class="terminal-text">Duration: 1.23s</span></div>
+                        <div class="terminal-line"><span class="terminal-text warning">Recommendation: Fix HIGH severity issues before deployment</span></div>
+                    </div>
+                </div>
+                <div class="feature-content">
+                    <h3 data-i18n="feat_score_title">Comprehensive Scoring System</h3>
+                    <p data-i18n="feat_score_desc">Get a clear security score from 0-100 with letter grades and risk levels. Track your progress as you fix vulnerabilities and improve your security posture.</p>
+                    <ul class="feature-list">
+                        <li data-i18n="feat_score_1">0-100 point scoring with letter grades (A+ to F)</li>
+                        <li data-i18n="feat_score_2">Severity-based deductions (Critical: -15, High: -10)</li>
+                        <li data-i18n="feat_score_3">Category breakdowns for targeted fixes</li>
+                        <li data-i18n="feat_score_4">Export reports in JSON, HTML, or Markdown</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="data-sources" id="demo">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <span class="section-tag" data-i18n="tech_tag">Supported Technologies</span>
+                <h2 data-i18n="tech_title">Works With Your Stack</h2>
+                <p data-i18n="tech_desc">Comprehensive support for popular Python and JavaScript frameworks out of the box.</p>
+            </div>
+
+            <div class="sources-grid">
+                <div class="source-card reveal">
+                    <div class="source-icon">🐍</div>
+                    <h4>Python</h4>
+                    <p>Django, Flask, FastAPI</p>
+                </div>
+                <div class="source-card reveal">
+                    <div class="source-icon">⚡</div>
+                    <h4>JavaScript</h4>
+                    <p>React, Vue, Node.js</p>
+                </div>
+                <div class="source-card reveal">
+                    <div class="source-icon">📦</div>
+                    <h4>Dependencies</h4>
+                    <p>pip, npm, requirements</p>
+                </div>
+                <div class="source-card reveal">
+                    <div class="source-icon">🔧</div>
+                    <h4>Config Files</h4>
+                    <p>.env, settings, JSON</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="docs">
+        <div class="cta-container">
+            <h2 data-i18n="cta_title">Ready to Secure Your Code?</h2>
+            <p data-i18n="cta_desc">Get started in minutes. Clone the repository and run your first scan.</p>
+            <div class="code-block">
+                <pre><span class="comment"># Clone repository</span>
+<span class="function">git</span> clone https://github.com/tworjaga/SecureMySite.git
+<span class="function">cd</span> SecureMySite
+
+<span class="comment"># Install dependencies</span>
+<span class="function">pip</span> install -r requirements.txt
+
+<span class="comment"># Run scan</span>
+<span class="function">python</span> main.py /path/to/your/project</pre>
+            </div>
+            <div class="hero-buttons" style="justify-content:center">
+                <a href="https://github.com/tworjaga/SecureMySite" class="btn-primary" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <span data-i18n="btn_github">View on GitHub</span>
+                </a>
+                <a href="https://github.com/tworjaga/SecureMySite/blob/main/USER_GUIDE.md" class="btn-secondary" target="_blank" data-i18n="btn_docs">Read Documentation</a>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <ul class="footer-links">
+                <li><a href="https://github.com/tworjaga/SecureMySite" target="_blank">GitHub</a></li>
+                <li><a href="https://github.com/tworjaga/SecureMySite/issues" target="_blank">Issues</a></li>
+                <li><a href="https://t.me/al7exy" target="_blank">Telegram</a></li>
+            </ul>
+            <div class="footer-copy" data-i18n="footer_copy">2024 SecureMySite. MIT License.</div>
+            <div class="footer-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                v1.0.0
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        // Particle system
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 210, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(0, 210, 255, ${0.2 * (1 - dist / 150)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Internationalization
+        const i18n = {
+            en: {
+                hero_tag: '100% Offline Security Analysis',
+                hero_title: 'Secure Your Code Before Deployment',
+                hero_desc: 'A fully offline, local desktop security analyzer for AI-generated web projects. Detect vulnerabilities through static analysis, dependency scanning, and configuration review.',
+                stat_cves: 'CVEs Tracked',
+                stat_scanners: 'Scanner Modules',
+                stat_latency: 'Network Latency',
+                btn_github: 'View on GitHub',
+                btn_explore: 'Explore Features',
+                arch_tag: 'Scanner Architecture',
+                arch_title: 'Five Specialized Detection Engines',
+                arch_desc: 'Modular scanner architecture with dedicated engines for each attack surface. From code-level vulnerabilities to configuration errors.',
+                scanner_python_title: 'Python SAST',
+                scanner_python_desc: 'AST-based static analysis for Python code. Detects SQL injection, command injection, hardcoded secrets, and unsafe deserialization.',
+                scanner_js_title: 'JavaScript Scanner',
+                scanner_js_desc: 'Detects DOM XSS, eval() usage, localStorage token storage, exposed API keys, and CORS misconfigurations in JS/TS code.',
+                scanner_config_title: 'Config Scanner',
+                scanner_config_desc: 'Analyzes .env files, settings.py, and configuration files for debug mode, hardcoded secrets, and insecure cookie flags.',
+                scanner_dep_title: 'Dependency Scanner',
+                scanner_dep_desc: 'Scans requirements.txt and package.json against local vulnerability database with 100+ CVEs. No external API calls.',
+                scanner_web_title: 'Web Scanner',
+                scanner_web_desc: 'Localhost-only dynamic analysis. Checks security headers, cookie flags, and endpoint security. No external URLs allowed.',
+                metric_patterns: 'Patterns',
+                metric_analysis: 'Analysis',
+                metric_checks: 'Checks',
+                metric_scan: 'Scan',
+                metric_offline: 'Offline',
+                metric_headers: 'Headers',
+                metric_local: 'Local',
+                metric_only: 'Only',
+                features_tag: 'Key Features',
+                features_title: 'Built for Security-First Development',
+                features_desc: 'Every feature designed with privacy and efficiency in mind. No data leaves your machine.',
+                feat_offline_title: '100% Offline Operation',
+                feat_offline_desc: 'All analysis happens locally on your machine. No code, no files, no data ever leaves your system. Perfect for sensitive codebases and compliance requirements.',
+                feat_offline_1: 'Local vulnerability database with 100+ CVEs',
+                feat_offline_2: 'No external API dependencies',
+                feat_offline_3: 'Air-gapped environment support',
+                feat_offline_4: 'Zero network latency',
+                feat_ai_title: 'AI-Powered Fix Generation',
+                feat_ai_desc: 'Generate structured prompts for ChatGPT, Claude, or your preferred AI assistant. Each prompt includes context, vulnerable code, and specific remediation guidance.',
+                feat_ai_1: 'Context-aware prompt building',
+                feat_ai_2: 'Includes code snippets and line numbers',
+                feat_ai_3: 'CWE references for security research',
+                feat_ai_4: 'One-click copy to clipboard',
+                feat_score_title: 'Comprehensive Scoring System',
+                feat_score_desc: 'Get a clear security score from 0-100 with letter grades and risk levels. Track your progress as you fix vulnerabilities and improve your security posture.',
+                feat_score_1: '0-100 point scoring with letter grades (A+ to F)',
+                feat_score_2: 'Severity-based deductions (Critical: -15, High: -10)',
+                feat_score_3: 'Category breakdowns for targeted fixes',
+                feat_score_4: 'Export reports in JSON, HTML, or Markdown',
+                tech_tag: 'Supported Technologies',
+                tech_title: 'Works With Your Stack',
+                tech_desc: 'Comprehensive support for popular Python and JavaScript frameworks out of the box.',
+                cta_title: 'Ready to Secure Your Code?',
+                cta_desc: 'Get started in minutes. Clone the repository and run your first scan.',
+                btn_docs: 'Read Documentation',
+                footer_copy: '2024 SecureMySite. MIT License.'
+            },
+            ru: {
+                hero_tag: '100% Автономный Анализ Безопасности',
+                hero_title: 'Защитите Код Перед Развертыванием',
+                hero_desc: 'Полностью автономный локальный анализатор безопасности для AI-генерируемых веб-проектов. Обнаружение уязвимостей через статический анализ, сканирование зависимостей и проверку конфигурации.',
+                stat_cves: 'CVE Отслеживается',
+                stat_scanners: 'Модулей Сканера',
+                stat_latency: 'Задержка Сети',
+                btn_github: 'На GitHub',
+                btn_explore: 'Изучить Возможности',
+                arch_tag: 'Архитектура Сканера',
+                arch_title: 'Пять Специализированных Движков Обнаружения',
+                arch_desc: 'Модульная архитектура сканера с выделенными движками для каждой поверхности атаки. От уязвимостей уровня кода до ошибок конфигурации.',
+                scanner_python_title: 'Python SAST',
+                scanner_python_desc: 'Статический анализ на основе AST для Python кода. Обнаруживает SQL-инъекции, командные инъекции, жестко закодированные секреты и небезопасную десериализацию.',
+                scanner_js_title: 'JavaScript Сканер',
+                scanner_js_desc: 'Обнаруживает DOM XSS, использование eval(), хранение токенов в localStorage, раскрытые API-ключи и неправильные CORS-конфигурации в JS/TS коде.',
+                scanner_config_title: 'Сканер Конфигурации',
+                scanner_config_desc: 'Анализирует .env файлы, settings.py и файлы конфигурации на предмет режима отладки, жестко закодированных секретов и небезопасных флагов cookie.',
+                scanner_dep_title: 'Сканер Зависимостей',
+                scanner_dep_desc: 'Сканирует requirements.txt и package.json по локальной базе уязвимостей с 100+ CVE. Без внешних API-вызовов.',
+                scanner_web_title: 'Веб-Сканер',
+                scanner_web_desc: 'Динамический анализ только на localhost. Проверяет заголовки безопасности, флаги cookie и безопасность эндпоинтов. Внешние URL запрещены.',
+                metric_patterns: 'Шаблонов',
+                metric_analysis: 'Анализ',
+                metric_checks: 'Проверок',
+                metric_scan: 'Скан',
+                metric_offline: 'Автономно',
+                metric_headers: 'Заголовков',
+                metric_local: 'Только',
+                metric_only: 'Локально',
+                features_tag: 'Ключевые Возможности',
+                features_title: 'Создано для Безопасной Разработки',
+                features_desc: 'Каждая функция разработана с учетом конфиденциальности и эффективности. Данные не покидают ваш компьютер.',
+                feat_offline_title: '100% Автономная Работа',
+                feat_offline_desc: 'Весь анализ выполняется локально на вашем компьютере. Никакой код, файлы или данные не покидают вашу систему. Идеально для конфиденциальных кодовых баз и требований соответствия.',
+                feat_offline_1: 'Локальная база уязвимостей с 100+ CVE',
+                feat_offline_2: 'Нет зависимостей от внешних API',
+                feat_offline_3: 'Поддержка изолированных сред',
+                feat_offline_4: 'Нулевая сетевая задержка',
+                feat_ai_title: 'AI-Генерация Исправлений',
+                feat_ai_desc: 'Генерация структурированных промптов для ChatGPT, Claude или вашего предпочитаемого AI-ассистента. Каждый промпт включает контекст, уязвимый код и конкретные инструкции по исправлению.',
+                feat_ai_1: 'Построение промптов с учетом контекста',
+                feat_ai_2: 'Включает фрагменты кода и номера строк',
+                feat_ai_3: 'Ссылки CWE для исследований безопасности',
+                feat_ai_4: 'Копирование в буфер обмена одним кликом',
+                feat_score_title: 'Комплексная Система Оценки',
+                feat_score_desc: 'Получите четкую оценку безопасности от 0-100 с буквенными оценками и уровнями риска. Отслеживайте прогресс при исправлении уязвимостей.',
+                feat_score_1: 'Оценка 0-100 с буквенными оценками (A+ до F)',
+                feat_score_2: 'Вычеты на основе серьезности (Критично: -15, Высоко: -10)',
+                feat_score_3: 'Разбивка по категориям для целевых исправлений',
+                feat_score_4: 'Экспорт отчетов в JSON, HTML или Markdown',
+                tech_tag: 'Поддерживаемые Технологии',
+                tech_title: 'Работает с Вашим Стеком',
+                tech_desc: 'Комплексная поддержка популярных Python и JavaScript фреймворков из коробки.',
+                cta_title: 'Готовы Защитить Свой Код?',
+                cta_desc: 'Начните за минуты. Клонируйте репозиторий и запустите первое сканирование.',
+                btn_docs: 'Документация',
+                footer_copy: '2024 SecureMySite. Лицензия MIT.'
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (i18n[lang][key]) {
+                    el.textContent = i18n[lang][key];
+                }
+            });
+            document.documentElement.lang = lang;
+        }
+
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+        });
+    </script>
+
+</body>
+</html>
