@@ -133,7 +133,7 @@
   .terminal { border: 1px solid var(--border); background: var(--surface); overflow: hidden; }
   .terminal-header { display: flex; align-items: center; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); }
   .term-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .td1{background:#ff5f56} .td2{background:#ffbd2e} .td3{background:#27c93f} .td4{background:#0000ff} .td5{background:#ffff00}
+  .td1{background:#ff5f56} .td2{background:#ffbd2e} .td3{background:#27c93f}
   .term-title { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-left: 8px; letter-spacing: 0.05em; }
   .terminal-body { padding: 28px 24px; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
   .t-line{display:flex;gap:16px} .t-prompt{color:var(--accent)} .t-cmd{color:var(--text)}
@@ -270,7 +270,7 @@
       <div id="skills-container"></div>
       <div class="terminal" style="margin-top:32px;">
         <div class="terminal-header">
-          <div class="term-dot td1"></div><div class="term-dot td2"></div><div class="term-dot td3"></div><div class="term-dot td4"></div><div class="term-dot td5"></div>
+          <div class="term-dot td1"></div><div class="term-dot td2"></div><div class="term-dot td3"></div>
           <span class="term-title">~/alexey — bash</span>
         </div>
         <div class="terminal-body">
@@ -278,7 +278,7 @@
           <div class="t-out t-green" data-i18n="term.whoami">alexey — systems &amp; security engineer</div>
           <div class="t-blank"></div>
           <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">cat focus.txt</span></div>
-          <div class="t-out"><span class="t-orange" data-i18n="term.focus1">backend</span> | <span class="t-green" data-i18n="term.focus2">embedded</span> | <span class="t-red" data-i18n="term.focus3">security</span> | <span class="t-blue" data-i18n="term.focus4">pentesting</span> | <span class="t-yellow" data-i18n="term.focus5">osint</span></div>
+          <div class="t-out"><span class="t-orange" data-i18n="term.focus1">backend</span> | <span class="t-green" data-i18n="term.focus2">embedded</span> | <span class="t-red" data-i18n="term.focus3">security</span></div>
           <div class="t-blank"></div>
           <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">echo $LOCATION</span></div>
           <div class="t-out">Moscow, Russia</div>
@@ -431,7 +431,7 @@ const i18n = {
     "proj.flowscope":"Flow-based network traffic analysis and anomaly investigation. Real-time packet inspection with flow-based anomaly detection for security operations.",
     "proj.devzero":"Comprehensive static educational platform for developers. Covers backend, frontend, mobile, penetration testing, and AI-assisted web coding with progress tracking.",
     "stack.title":"Stack",
-    "term.whoami":"alexey — systems & security engineer","term.focus1":"backend","term.focus2":"embedded","term.focus3":"security","term.focus4":"pentest","term.focus5":"osint",
+    "term.whoami":"alexey — systems & security engineer","term.focus1":"backend","term.focus2":"embedded","term.focus3":"security",
     "term.comment1":"12 production systems shipped","term.years":"years","term.selftaught":"self-taught","term.learning":"still learning",
     "term.comment2":"always curious about what's below the surface",
     "contact.headline":"Let's<br>work <span class='accent'>together.</span>",
@@ -469,7 +469,7 @@ const i18n = {
     "proj.flowscope":"Анализ сетевого трафика на основе потоков. Инспекция пакетов в реальном времени с обнаружением аномалий для операций безопасности.",
     "proj.devzero":"Статическая образовательная платформа для разработчиков. Бэкенд, фронтенд, мобайл, пентест и AI-программирование с отслеживанием прогресса.",
     "stack.title":"Стек",
-    "term.whoami":"алексей — инженер систем и безопасности","term.focus1":"бэкенд","term.focus2":"железо","term.focus3":"безопасность","term.focus4":"пентест","term.focus5":"osint",
+    "term.whoami":"алексей — инженер систем и безопасности","term.focus1":"бэкенд","term.focus2":"железо","term.focus3":"безопасность",
     "term.comment1":"12 систем в продакшне","term.years":"лет","term.selftaught":"самоучка","term.learning":"продолжаю учиться",
     "term.comment2":"всегда интересно, что под капотом",
     "contact.headline":"Давай<br>работать <span class='accent'>вместе.</span>",
@@ -507,7 +507,7 @@ const i18n = {
     "proj.flowscope":"Flussbasierte Netzwerkverkehrsanalyse. Echtzeit-Paketinspektion mit Anomalieerkennung für Sicherheitsoperationen.",
     "proj.devzero":"Statische Bildungsplattform für Entwickler. Backend, Frontend, Mobile, Penetrationstests und KI-gestütztes Web-Coding.",
     "stack.title":"Stack",
-    "term.whoami":"alexey — system- und sicherheitsingenieur","term.focus1":"backend","term.focus2":"hardware","term.focus3":"sicherheit","term.focus4":"Penetrationstest","term.focus5":"osint",
+    "term.whoami":"alexey — system- und sicherheitsingenieur","term.focus1":"backend","term.focus2":"hardware","term.focus3":"sicherheit",
     "term.comment1":"12 Systeme in Produktion","term.years":"Jahre","term.selftaught":"Autodidakt","term.learning":"lerne weiter",
     "term.comment2":"immer neugierig auf das, was unter der Oberfläche liegt",
     "contact.headline":"Lass uns<br><span class='accent'>zusammenarbeiten.</span>",
@@ -653,6 +653,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </body>
 </html>
  
+
 
 
 
