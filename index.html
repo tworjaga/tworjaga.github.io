@@ -203,9 +203,13 @@
     .nav-status { display: none; }
     .lang-btn { padding: 3px 6px; font-size: 9px; }
 
-    /* hero */
-    .hero { padding: 0 16px 60px; min-height: 100svh; justify-content: flex-end; }
-    .hero-bg-text { font-size: clamp(60px, 22vw, 120px); }
+    /* hero — clip bg text so it never bleeds outside the section */
+    .hero { padding: 0 16px 60px; min-height: 100svh; justify-content: flex-end; overflow: hidden; }
+    .hero-bg-text {
+      font-size: clamp(48px, 28vw, 100px);
+      max-width: 100vw;
+      -webkit-text-stroke: 1px rgba(200,240,64,0.04);
+    }
     .hero-title { font-size: clamp(38px, 11vw, 64px); margin-bottom: 24px; }
     .hero-tag { font-size: 10px; margin-bottom: 14px; }
     .hero-meta { flex-direction: column; gap: 20px; align-items: flex-start; }
@@ -252,7 +256,10 @@
     .stack-item img { height: 36px; }
     .stack-name { font-size: 13px; }
 
-    /* terminal */
+    /* terminal — tall elements on mobile often miss IntersectionObserver threshold,
+       so bypass the reveal animation and keep the terminal always visible */
+    .terminal { overflow-x: hidden; overflow-y: visible; }
+    .terminal.reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
     .terminal-body { padding: 16px; font-size: 11px; overflow-x: auto; }
     .t-line, .t-out { flex-wrap: nowrap; white-space: nowrap; }
 
@@ -277,6 +284,7 @@
   /* very small phones */
   @media (max-width: 380px) {
     .hero-title { font-size: clamp(32px, 10vw, 48px); }
+    .hero-bg-text { font-size: clamp(40px, 26vw, 80px); }
     .stack-grid { grid-template-columns: 1fr !important; }
   }
  
@@ -493,7 +501,6 @@
 </div>
  
 <script>
-const i18n = {
   en: {
     "nav.about":"About","nav.systems":"Systems","nav.stack":"Stack","nav.contact":"Contact","nav.available":"Available",
     "hero.tag":"Systems & Security Engineer",
