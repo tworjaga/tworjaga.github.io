@@ -288,6 +288,45 @@
   @media (min-width: 1024px) { .project-card { padding: 32px; } }
   .project-card.hidden { display: none; }
 
+  /* SCROLL TO TOP */
+  .scroll-top { position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 800; opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.3s, border-color 0.2s, color 0.2s; pointer-events: none; }
+  .scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
+  .scroll-top:hover { border-color: var(--accent); color: var(--accent); }
+  .scroll-top svg { width: 16px; height: 16px; }
+
+  /* COPY LINK BUTTON ON PROJECT CARDS */
+  .card-copy { position: absolute; top: 12px; right: 12px; width: 28px; height: 28px; border: 1px solid var(--border); background: var(--bg); color: var(--muted); display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.2s, border-color 0.2s, color 0.2s; z-index: 2; }
+  .project-card:hover .card-copy { opacity: 1; }
+  .card-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .card-copy svg { width: 12px; height: 12px; }
+  .card-copy.copied { border-color: var(--accent2); color: var(--accent2); opacity: 1; }
+
+  /* TYPING CURSOR */
+  .typing-cursor { display: inline-block; width: 3px; height: 0.85em; background: var(--accent); margin-left: 2px; vertical-align: middle; animation: cur-blink 0.8s step-end infinite; }
+  @keyframes cur-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* PROJECT DETAIL MODAL */
+  .proj-modal-overlay { position: fixed; inset: 0; background: rgba(12,12,10,0.96); z-index: 9100; display: none; align-items: center; justify-content: center; backdrop-filter: blur(12px); padding: 16px; }
+  .proj-modal-overlay.open { display: flex; }
+  .proj-modal { border: 1px solid var(--border-hi); background: var(--surface); width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; position: relative; animation: modal-in 0.3s ease; }
+  .proj-modal-header { padding: 32px 32px 0; position: relative; }
+  .proj-modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; font-family: var(--mono); transition: color 0.2s; line-height: 1; }
+  .proj-modal-close:hover { color: var(--accent3); }
+  .proj-modal-tag { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+  .proj-modal-name { font-family: var(--display); font-size: clamp(24px,4vw,36px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .proj-modal-date { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 24px; }
+  .proj-modal-body { padding: 24px 32px 32px; }
+  .proj-modal-desc { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 24px; }
+  .proj-modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+  .proj-modal-divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+  .proj-modal-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .proj-modal-link { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 20px; border: 1px solid var(--border-hi); color: var(--muted); text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .proj-modal-link:hover { border-color: var(--accent); color: var(--accent); }
+  .proj-modal-link.primary { border-color: var(--accent); color: var(--bg); background: var(--accent); }
+  .proj-modal-link.primary:hover { background: transparent; color: var(--accent); }
+  [data-theme="light"] .proj-modal-link.primary { color: #1a1a18; }
+  @media (max-width: 600px) { .proj-modal-header { padding: 24px 20px 0; } .proj-modal-body { padding: 20px 20px 24px; } }
+
   /* GRAIN */
   .grain { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 999; opacity: var(--grain-opacity);
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -347,7 +386,7 @@
   <h1 class="hero-title">
     <div data-i18n="hero.line1">Building</div>
     <div class="line2"><span data-i18n="hero.line2a">reliable</span> <span class="accent" data-i18n="hero.line2b">systems</span></div>
-    <div class="line2" data-i18n="hero.line3">methodically.</div>
+    <div class="line2" id="typing-line" data-i18n="hero.line3">methodically.</div>
   </h1>
   <div class="hero-meta">
     <p class="hero-desc" data-i18n="hero.desc">Mid-Level Software Engineer. Backend, Systems &amp; Security. Self-taught. Hardware-curious. Driven by understanding what happens beneath the surface.</p>
@@ -445,20 +484,20 @@
     </div>
     <div class="projects-grid reveal" id="projectsGrid">
       <!-- Row 1 -->
-      <div class="project-card"><div class="card-name">ESP32Gotchi</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.esp32gotchi">Autonomous WPA/WPA2 handshake capture device on ESP32-WROOM-32. FreeRTOS firmware with 4 core-pinned tasks, promiscuous-mode 802.11 sniffing, EAPOL parsing, PCAP writes to SD. OLED face UI, ~10 EUR BOM.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">FreeRTOS</span><span class="card-tag">ESP32</span><span class="card-tag">Hardware</span><span class="card-tag">WiFi</span></div><div class="card-perf">100%</div></div>
-      <div class="project-card"><div class="card-name">PiNetCore</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.pinetcore">Production-ready Raspberry Pi 5 network appliance. Rust core (Tokio/Axum/pnet) for packet capture and nftables firewall. Modular plugin system for WireGuard VPN, Pi-hole DNS, Suricata IDS. React 18 dashboard with live WebSocket metrics.</p><div class="card-tags"><span class="card-tag">Rust</span><span class="card-tag">React</span><span class="card-tag">RaspberryPi</span><span class="card-tag">Networking</span><span class="card-tag">Docker</span></div><div class="card-perf">46%</div></div>
+      <div class="project-card" data-id="esp32gotchi" data-name="ESP32Gotchi" data-date="Mar 2026" data-desc-key="proj.esp32gotchi" data-tags="C,FreeRTOS,ESP32,Hardware,WiFi" data-gh="https://github.com/tworjaga/ESP32Gotchi" onclick="openProjModal(this)"><div class="card-name">ESP32Gotchi</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.esp32gotchi">Autonomous WPA/WPA2 handshake capture device on ESP32-WROOM-32.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">FreeRTOS</span><span class="card-tag">ESP32</span><span class="card-tag">Hardware</span><span class="card-tag">WiFi</span></div><div class="card-perf">100%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'esp32gotchi')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="pinetcore" data-name="PiNetCore" data-date="Mar 2026" data-desc-key="proj.pinetcore" data-tags="Rust,React,RaspberryPi,Networking,Docker" data-gh="https://github.com/tworjaga/PiNetCore" onclick="openProjModal(this)"><div class="card-name">PiNetCore</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.pinetcore">Production-ready Raspberry Pi 5 network appliance.</p><div class="card-tags"><span class="card-tag">Rust</span><span class="card-tag">React</span><span class="card-tag">RaspberryPi</span><span class="card-tag">Networking</span><span class="card-tag">Docker</span></div><div class="card-perf">46%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'pinetcore')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
       <!-- Row 2 -->
-      <div class="project-card"><div class="card-name">SecureMySite</div><div class="card-date">Feb 27, 2026</div><p class="card-desc" data-i18n="proj.securemysite">Local desktop security analyzer for AI-generated web projects. 100% offline SAST/DAST scanning with severity scoring and AI fix prompt generation.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">PyQt6</span><span class="card-tag">SAST/DAST</span><span class="card-tag">Security</span></div><div class="card-perf">74%</div></div>
-      <div class="project-card"><div class="card-name">GEMINI-OVERSEER <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.gemini">Enterprise-grade AI orchestration and monitoring system for BLACKBOXAI within VS Code. Real-time telemetry, command execution, and security sandboxing.</p><div class="card-tags"><span class="card-tag">TypeScript</span><span class="card-tag">VS Code</span><span class="card-tag">AI</span><span class="card-tag">Security</span></div><div class="card-perf">59%</div></div>
+      <div class="project-card" data-id="securemysite" data-name="SecureMySite" data-date="Feb 27, 2026" data-desc-key="proj.securemysite" data-tags="Python,PyQt6,SAST/DAST,Security" data-gh="https://github.com/tworjaga/SecureMySite" onclick="openProjModal(this)"><div class="card-name">SecureMySite</div><div class="card-date">Feb 27, 2026</div><p class="card-desc" data-i18n="proj.securemysite">Local desktop security analyzer for AI-generated web projects.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">PyQt6</span><span class="card-tag">SAST/DAST</span><span class="card-tag">Security</span></div><div class="card-perf">74%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'securemysite')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="gemini-overseer" data-name="GEMINI-OVERSEER" data-date="Recently" data-desc-key="proj.gemini" data-tags="TypeScript,VS Code,AI,Security" data-gh="https://github.com/tworjaga/gemini-overseer" onclick="openProjModal(this)"><div class="card-name">GEMINI-OVERSEER <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.gemini">Enterprise-grade AI orchestration and monitoring system for BLACKBOXAI within VS Code.</p><div class="card-tags"><span class="card-tag">TypeScript</span><span class="card-tag">VS Code</span><span class="card-tag">AI</span><span class="card-tag">Security</span></div><div class="card-perf">59%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'gemini-overseer')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
       <!-- Row 3 -->
-      <div class="project-card"><div class="card-name">pivotmap</div><div class="card-date">Feb 26, 2026</div><p class="card-desc" data-i18n="proj.pivotmap">Attack path intelligence engine for offensive security teams. Ingests scan results, builds directed attack graphs, identifies realistic pivot opportunities.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Graph</span><span class="card-tag">Offensive</span><span class="card-tag">Security</span></div><div class="card-perf">57%</div></div>
-      <div class="project-card"><div class="card-name">bluescope</div><div class="card-date">Feb 25, 2026</div><p class="card-desc" data-i18n="proj.bluescope">Bluetooth Monitoring &amp; Security Platform. ML-powered anomaly detection, real-time BLE traffic analysis, and comprehensive security auditing.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Bluetooth</span><span class="card-tag">ML</span><span class="card-tag">Security</span></div><div class="card-perf">75%</div></div>
+      <div class="project-card" data-id="pivotmap" data-name="pivotmap" data-date="Feb 26, 2026" data-desc-key="proj.pivotmap" data-tags="Python,Graph,Offensive,Security" data-gh="https://github.com/tworjaga/pivotmap" onclick="openProjModal(this)"><div class="card-name">pivotmap</div><div class="card-date">Feb 26, 2026</div><p class="card-desc" data-i18n="proj.pivotmap">Attack path intelligence engine for offensive security teams.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Graph</span><span class="card-tag">Offensive</span><span class="card-tag">Security</span></div><div class="card-perf">57%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'pivotmap')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="bluescope" data-name="bluescope" data-date="Feb 25, 2026" data-desc-key="proj.bluescope" data-tags="Python,Bluetooth,ML,Security" data-gh="https://github.com/tworjaga/bluescope" onclick="openProjModal(this)"><div class="card-name">bluescope</div><div class="card-date">Feb 25, 2026</div><p class="card-desc" data-i18n="proj.bluescope">Bluetooth Monitoring &amp; Security Platform. ML-powered anomaly detection.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Bluetooth</span><span class="card-tag">ML</span><span class="card-tag">Security</span></div><div class="card-perf">75%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'bluescope')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
       <!-- Row 4 -->
-      <div class="project-card"><div class="card-name">flipper-rf-lab</div><div class="card-date">Feb 14, 2026</div><p class="card-desc" data-i18n="proj.flipper">RF analysis platform for Flipper Zero. 15 advanced features: device fingerprinting, protocol detection, threat modeling. Lab-grade timing (&lt;1μs), pure C.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">RF</span><span class="card-tag">Hardware</span><span class="card-tag">Flipper</span></div><div class="card-perf">96%</div></div>
-      <div class="project-card"><div class="card-name">keyspace</div><div class="card-date">Feb 10, 2026</div><p class="card-desc" data-i18n="proj.keyspace">Cross-platform password auditing tool for authorized security testing. PyQt6 GUI with modular backend supporting multiple attack vectors and hash types.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Cryptography</span><span class="card-tag">Security</span><span class="card-tag">Qt</span></div><div class="card-perf">75%</div></div>
+      <div class="project-card" data-id="flipper-rf-lab" data-name="flipper-rf-lab" data-date="Feb 14, 2026" data-desc-key="proj.flipper" data-tags="C,RF,Hardware,Flipper" data-gh="https://github.com/tworjaga/flipper-rf-lab" onclick="openProjModal(this)"><div class="card-name">flipper-rf-lab</div><div class="card-date">Feb 14, 2026</div><p class="card-desc" data-i18n="proj.flipper">RF analysis platform for Flipper Zero. 15 advanced features, lab-grade timing.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">RF</span><span class="card-tag">Hardware</span><span class="card-tag">Flipper</span></div><div class="card-perf">96%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'flipper-rf-lab')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="keyspace" data-name="keyspace" data-date="Feb 10, 2026" data-desc-key="proj.keyspace" data-tags="Python,Cryptography,Security,Qt" data-gh="https://github.com/tworjaga/keyspace" onclick="openProjModal(this)"><div class="card-name">keyspace</div><div class="card-date">Feb 10, 2026</div><p class="card-desc" data-i18n="proj.keyspace">Cross-platform password auditing tool. PyQt6 GUI with modular backend.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Cryptography</span><span class="card-tag">Security</span><span class="card-tag">Qt</span></div><div class="card-perf">75%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'keyspace')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
       <!-- Row 5 -->
-      <div class="project-card"><div class="card-name">FlowScope</div><div class="card-date">Feb 19, 2026</div><p class="card-desc" data-i18n="proj.flowscope">Flow-based network traffic analysis and anomaly investigation. Real-time packet inspection with flow-based anomaly detection for security operations.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Networking</span><span class="card-tag">Analysis</span><span class="card-tag">Security</span></div><div class="card-perf">87%</div></div>
-      <div class="project-card"><div class="card-name">DevZero <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.devzero">Comprehensive static educational platform for developers. Covers backend, frontend, mobile, penetration testing, and AI-assisted web coding with progress tracking.</p><div class="card-tags"><span class="card-tag">JavaScript</span><span class="card-tag">Education</span><span class="card-tag">Platform</span><span class="card-tag">Static</span></div><div class="card-perf">32%</div></div>
+      <div class="project-card" data-id="flowscope" data-name="FlowScope" data-date="Feb 19, 2026" data-desc-key="proj.flowscope" data-tags="Python,Networking,Analysis,Security" data-gh="https://github.com/tworjaga/FlowScope" onclick="openProjModal(this)"><div class="card-name">FlowScope</div><div class="card-date">Feb 19, 2026</div><p class="card-desc" data-i18n="proj.flowscope">Flow-based network traffic analysis and anomaly investigation.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Networking</span><span class="card-tag">Analysis</span><span class="card-tag">Security</span></div><div class="card-perf">87%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'flowscope')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="devzero" data-name="DevZero" data-date="Recently" data-desc-key="proj.devzero" data-tags="JavaScript,Education,Platform,Static" data-gh="https://github.com/tworjaga/DevZero" onclick="openProjModal(this)"><div class="card-name">DevZero <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.devzero">Comprehensive static educational platform for developers.</p><div class="card-tags"><span class="card-tag">JavaScript</span><span class="card-tag">Education</span><span class="card-tag">Platform</span><span class="card-tag">Static</span></div><div class="card-perf">32%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'devzero')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
     </div>
   </div>
 </section>
@@ -537,6 +576,29 @@
   </div>
 </div>
  
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+</button>
+
+<!-- Project detail modal -->
+<div class="proj-modal-overlay" id="projModal" onclick="closeProjModal(event)">
+  <div class="proj-modal" id="projModalInner">
+    <div class="proj-modal-header">
+      <button class="proj-modal-close" onclick="document.getElementById('projModal').classList.remove('open')">×</button>
+      <div class="proj-modal-tag" id="pm-tag">PROJECT</div>
+      <div class="proj-modal-name" id="pm-name"></div>
+      <div class="proj-modal-date" id="pm-date"></div>
+    </div>
+    <div class="proj-modal-body">
+      <p class="proj-modal-desc" id="pm-desc"></p>
+      <div class="proj-modal-tags" id="pm-tags"></div>
+      <div class="proj-modal-divider"></div>
+      <div class="proj-modal-links" id="pm-links"></div>
+    </div>
+  </div>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const i18n = {
   en: {
@@ -685,6 +747,77 @@ function applyI18n() {
 }
  
 // Cursor — only on fine-pointer (mouse) devices, never on touch
+// Scroll to top
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+});
+
+// Typing animation on hero
+(function initTyping() {
+  const el = document.getElementById('typing-line');
+  if (!el) return;
+  const fullText = el.textContent.trim();
+  el.innerHTML = '<span class="typing-cursor"></span>';
+  let i = 0;
+  const cursor = el.querySelector('.typing-cursor');
+  function type() {
+    if (i <= fullText.length) {
+      el.innerHTML = fullText.slice(0, i) + '<span class="typing-cursor"></span>';
+      i++;
+      setTimeout(type, i === 1 ? 900 : 65 + Math.random() * 40);
+    }
+  }
+  setTimeout(type, 600);
+})();
+
+// Copy link on project cards
+function copyCardLink(e, id) {
+  e.stopPropagation();
+  const url = location.origin + location.pathname + '#' + id;
+  const btn = e.currentTarget;
+  navigator.clipboard.writeText(url).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>';
+    }, 2000);
+  }).catch(() => {});
+}
+
+// Project detail modal
+function openProjModal(card) {
+  const name = card.dataset.name;
+  const date = card.dataset.date;
+  const descKey = card.dataset.descKey;
+  const tagsRaw = card.dataset.tags || '';
+  const gh = card.dataset.gh || '';
+  document.getElementById('pm-name').textContent = name;
+  document.getElementById('pm-date').textContent = date;
+  document.getElementById('pm-desc').textContent = t(descKey);
+  document.getElementById('pm-tags').innerHTML = tagsRaw.split(',').map(tag =>
+    `<span class="tag">${tag.trim()}</span>`).join('');
+  const links = document.getElementById('pm-links');
+  links.innerHTML = gh
+    ? `<a href="${gh}" target="_blank" rel="noopener" class="proj-modal-link primary">↗ GitHub</a>
+       <button class="proj-modal-link" onclick="copyCardLink(event,'${card.dataset.id}')">⎘ Copy Link</button>`
+    : `<button class="proj-modal-link" onclick="copyCardLink(event,'${card.dataset.id}')">⎘ Copy Link</button>`;
+  document.getElementById('projModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeProjModal(e) {
+  if (e.target === document.getElementById('projModal')) {
+    document.getElementById('projModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('projModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
 // Skills
 const skillsData = [
   {key:'skill.python',level:95,color:'#c8f040'},
