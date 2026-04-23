@@ -111,8 +111,6 @@
   .metric-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
   .projects-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
   @media (min-width: 768px) { .projects-grid { grid-template-columns: repeat(2,1fr); } }
-  .project-card { background: var(--bg); padding: 20px; position: relative; transition: background 0.2s; overflow: hidden; }
-  @media (min-width: 1024px) { .project-card { padding: 32px; } }
   .project-card:hover { background: var(--surface2); }
   .project-card::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 2px; background: var(--accent); transition: width 0.3s ease; }
   .project-card:hover::before { width: 100%; }
@@ -207,9 +205,25 @@
   .stats-val { font-family: var(--display); font-size: clamp(32px,7vw,48px); font-weight: 800; letter-spacing: -0.04em; color: var(--accent); }
   .stats-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
 
+  /* HAMBURGER */
+  .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: none; border: 1px solid var(--border); cursor: pointer; padding: 10px; flex-shrink: 0; transition: border-color 0.2s; }
+  .nav-hamburger:hover { border-color: var(--accent); }
+  .nav-hamburger span { display: block; width: 100%; height: 1px; background: var(--text); transition: transform 0.3s ease, opacity 0.3s ease, background 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--accent); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--accent); }
+
+  .nav-drawer { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; z-index: 850; background: rgba(12,12,10,0.98); backdrop-filter: blur(16px); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; transform: translateY(-100%); opacity: 0; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.35s ease; pointer-events: none; }
+  .nav-drawer.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+  .nav-drawer a { font-family: var(--display); font-size: clamp(28px,8vw,48px); font-weight: 800; color: var(--muted); text-decoration: none; letter-spacing: -0.03em; transition: color 0.2s; padding: 8px 0; }
+  .nav-drawer a:hover { color: var(--accent); }
+  .nav-drawer-lang { display: flex; gap: 8px; margin-top: 32px; }
+  .nav-drawer-lang .lang-btn { font-size: 12px; padding: 6px 14px; border: 1px solid var(--border); }
+
   /* RESPONSIVE CONSOLIDATION — hide nav links below 900px, cursor on touch, misc tweaks */
   @media (max-width: 900px) {
     .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
   }
   @media (max-width: 600px) {
     body { cursor: auto; font-size: 14px; }
@@ -237,6 +251,15 @@
     .stats-grid { grid-template-columns: repeat(2,1fr); }
   }
  
+  /* TAG FILTER */
+  .tag-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .filter-btn { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border); padding: 6px 14px; letter-spacing: 0.05em; background: transparent; cursor: pointer; transition: all 0.2s; }
+  .filter-btn:hover { border-color: var(--border-hi); color: var(--text); }
+  .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,240,64,0.06); }
+  .project-card { background: var(--bg); padding: 20px; position: relative; transition: background 0.2s, opacity 0.25s, transform 0.25s; overflow: hidden; }
+  @media (min-width: 1024px) { .project-card { padding: 32px; } }
+  .project-card.hidden { display: none; }
+
   /* GRAIN */
   .grain { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 999; opacity: 0.025;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -268,8 +291,23 @@
       <div class="status-dot"></div>
       <span data-i18n="nav.available">Available</span>
     </div>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<div class="nav-drawer" id="navDrawer">
+  <a href="#about" data-i18n="nav.about" onclick="closeDrawer()">About</a>
+  <a href="#systems" data-i18n="nav.systems" onclick="closeDrawer()">Systems</a>
+  <a href="#stack" data-i18n="nav.stack" onclick="closeDrawer()">Stack</a>
+  <a href="#contact" data-i18n="nav.contact" onclick="closeDrawer()">Contact</a>
+  <div class="nav-drawer-lang">
+    <button class="lang-btn" onclick="setLang('en');closeDrawer()">EN</button>
+    <button class="lang-btn" onclick="setLang('ru');closeDrawer()">RU</button>
+    <button class="lang-btn" onclick="setLang('de');closeDrawer()">DE</button>
+  </div>
+</div>
  
 <section class="hero">
   <div class="hero-bg-text">SYSTEMS</div>
@@ -363,7 +401,17 @@
         <div class="metric"><div class="metric-val">&lt;1ms</div><div class="metric-label" data-i18n="metric.detect">Detection</div></div>
       </div>
     </div>
-    <div class="projects-grid reveal">
+    <div class="tag-filter reveal" id="tagFilter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="C">C</button>
+      <button class="filter-btn" data-filter="Python">Python</button>
+      <button class="filter-btn" data-filter="Rust">Rust</button>
+      <button class="filter-btn" data-filter="Hardware">Hardware</button>
+      <button class="filter-btn" data-filter="Security">Security</button>
+      <button class="filter-btn" data-filter="AI">AI</button>
+      <button class="filter-btn" data-filter="Networking">Networking</button>
+    </div>
+    <div class="projects-grid reveal" id="projectsGrid">
       <!-- Row 1 -->
       <div class="project-card"><div class="card-name">ESP32Gotchi</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.esp32gotchi">Autonomous WPA/WPA2 handshake capture device on ESP32-WROOM-32. FreeRTOS firmware with 4 core-pinned tasks, promiscuous-mode 802.11 sniffing, EAPOL parsing, PCAP writes to SD. OLED face UI, ~10 EUR BOM.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">FreeRTOS</span><span class="card-tag">ESP32</span><span class="card-tag">Hardware</span><span class="card-tag">WiFi</span></div><div class="card-perf">100%</div></div>
       <div class="project-card"><div class="card-name">PiNetCore</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.pinetcore">Production-ready Raspberry Pi 5 network appliance. Rust core (Tokio/Axum/pnet) for packet capture and nftables firewall. Modular plugin system for WireGuard VPN, Pi-hole DNS, Suricata IDS. React 18 dashboard with live WebSocket metrics.</p><div class="card-tags"><span class="card-tag">Rust</span><span class="card-tag">React</span><span class="card-tag">RaspberryPi</span><span class="card-tag">Networking</span><span class="card-tag">Docker</span></div><div class="card-perf">46%</div></div>
@@ -591,7 +639,7 @@ function t(key) { return i18n[lang][key] || i18n.en[key] || key; }
 function setLang(l) {
   lang = l;
   localStorage.setItem('portfolio-lang', l);
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === l.toUpperCase()));
   applyI18n();
   renderSkills();
   renderStack();
@@ -659,6 +707,35 @@ const obs = new IntersectionObserver(entries => {
 }, {threshold:0.2});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
  
+// Hamburger nav
+function toggleDrawer() {
+  const h = document.getElementById('hamburger');
+  const d = document.getElementById('navDrawer');
+  const open = h.classList.toggle('open');
+  d.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('navDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close drawer on ESC
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeDrawer(); });
+
+// Tag filter
+document.getElementById('tagFilter').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('#projectsGrid .project-card').forEach(card => {
+    const tags = Array.from(card.querySelectorAll('.card-tag')).map(t => t.textContent.trim());
+    card.classList.toggle('hidden', filter !== 'all' && !tags.includes(filter));
+  });
+});
+
 // Modal
 function openModal() { document.getElementById('modal').classList.add('open'); }
 function closeModal(e) { if(e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
@@ -705,7 +782,7 @@ document.addEventListener('scroll', () => {
  
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent === lang.toUpperCase()));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase()));
   applyI18n();
   renderSkills();
   renderStack();
