@@ -12,12 +12,23 @@
     --border: #2a2a27; --border-hi: #3d3d39; --text: #e8e6e0; --muted: #7a7870;
     --accent: #c8f040; --accent2: #40f0a0; --accent3: #f04060; --accent4: #f0a040; --accent5: #4FA3FF; --accent6: #A970FF;
     --mono: 'IBM Plex Mono', monospace; --sans: 'IBM Plex Sans', sans-serif; --display: 'Syne', sans-serif;
+    --grain-opacity: 0.025;
+    --grid-line: rgba(200,240,64,0.03);
+    --scan-line: rgba(0,0,0,0.04);
+  }
+  [data-theme="light"] {
+    --bg: #f5f4f0; --surface: #eceae4; --surface2: #e2e0d8;
+    --border: #d0cec6; --border-hi: #b8b6ae; --text: #1a1a18; --muted: #6a6860;
+    --accent: #7aaa00; --accent2: #00a068; --accent3: #d02040; --accent4: #c07800; --accent5: #1a6fd4; --accent6: #7040cc;
+    --grain-opacity: 0.012;
+    --grid-line: rgba(100,140,0,0.04);
+    --scan-line: rgba(0,0,0,0.02);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; overflow-x: hidden; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M4 2 L4 16 L7.5 12.5 L10.5 18 L12.5 17 L9.5 11 L14 11 Z' fill='%23c8f040' stroke='%230c0c0a' stroke-width='1'/%3E%3C/svg%3E") 4 2, auto; }
-  body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.04) 3px, rgba(0,0,0,0.04) 4px); }
-  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(200,240,64,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(200,240,64,0.03) 1px, transparent 1px); background-size: 60px 60px; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 15px; line-height: 1.7; overflow-x: hidden; cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M4 2 L4 16 L7.5 12.5 L10.5 18 L12.5 17 L9.5 11 L14 11 Z' fill='%23c8f040' stroke='%230c0c0a' stroke-width='1'/%3E%3C/svg%3E") 4 2, auto; transition: background 0.3s ease, color 0.3s ease; }
+  body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1000; background: repeating-linear-gradient(0deg, transparent, transparent 3px, var(--scan-line) 3px, var(--scan-line) 4px); }
+  body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px); background-size: 60px 60px; }
  
   /* NAV */
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 900; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 56px; border-bottom: 1px solid var(--border); background: rgba(12,12,10,0.92); backdrop-filter: blur(12px); }
@@ -205,7 +216,20 @@
   .stats-val { font-family: var(--display); font-size: clamp(32px,7vw,48px); font-weight: 800; letter-spacing: -0.04em; color: var(--accent); }
   .stats-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
 
-  /* HAMBURGER */
+  /* THEME TOGGLE */
+  .theme-toggle { width: 44px; height: 44px; background: none; border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, background 0.2s; flex-shrink: 0; color: var(--muted); }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-toggle svg { width: 16px; height: 16px; transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .theme-toggle .icon-moon { display: block; }
+  .theme-toggle .icon-sun { display: none; }
+  [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="light"] .theme-toggle .icon-sun { display: block; }
+  [data-theme="light"] .theme-toggle svg { transform: rotate(180deg); }
+
+  /* smooth transition for all themed elements */
+  nav, section, footer, .modal, .terminal, .featured-project, .project-card, .skills-panel, .stack-item, .contact-link {
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  }
   .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 44px; height: 44px; background: none; border: 1px solid var(--border); cursor: pointer; padding: 10px; flex-shrink: 0; transition: border-color 0.2s; }
   .nav-hamburger:hover { border-color: var(--accent); }
   .nav-hamburger span { display: block; width: 100%; height: 1px; background: var(--text); transition: transform 0.3s ease, opacity 0.3s ease, background 0.2s; }
@@ -251,7 +275,10 @@
     .stats-grid { grid-template-columns: repeat(2,1fr); }
   }
  
-  /* TAG FILTER */
+  [data-theme="light"] .hero-bg-text { -webkit-text-stroke: 1px rgba(100,140,0,0.08); }
+  [data-theme="light"] .btn-primary { color: #1a1a18; }
+  [data-theme="light"] .nav-drawer { background: rgba(245,244,240,0.98); }
+  [data-theme="light"] body { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M4 2 L4 16 L7.5 12.5 L10.5 18 L12.5 17 L9.5 11 L14 11 Z' fill='%237aaa00' stroke='%23f5f4f0' stroke-width='1'/%3E%3C/svg%3E") 4 2, auto; }
   .tag-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
   .filter-btn { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--border); padding: 6px 14px; letter-spacing: 0.05em; background: transparent; cursor: pointer; transition: all 0.2s; }
   .filter-btn:hover { border-color: var(--border-hi); color: var(--text); }
@@ -261,7 +288,7 @@
   .project-card.hidden { display: none; }
 
   /* GRAIN */
-  .grain { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 999; opacity: 0.025;
+  .grain { position: fixed; inset: -50%; width: 200%; height: 200%; pointer-events: none; z-index: 999; opacity: var(--grain-opacity);
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     animation: grain 0.4s steps(1) infinite; }
   @keyframes grain {
@@ -291,6 +318,10 @@
       <div class="status-dot"></div>
       <span data-i18n="nav.available">Available</span>
     </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" onclick="toggleTheme()">
+      <svg class="icon-moon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75 9.75 9.75 0 018.25 6c0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25 9.75 9.75 0 0012.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+      <svg class="icon-sun" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+    </button>
     <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
       <span></span><span></span><span></span>
     </button>
@@ -707,6 +738,18 @@ const obs = new IntersectionObserver(entries => {
 }, {threshold:0.2});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
  
+// Theme toggle
+function toggleTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  const next = isLight ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next === 'dark' ? '' : 'light');
+  localStorage.setItem('portfolio-theme', next);
+}
+(function initTheme() {
+  const saved = localStorage.getItem('portfolio-theme');
+  if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+})();
+
 // Hamburger nav
 function toggleDrawer() {
   const h = document.getElementById('hamburger');
