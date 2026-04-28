@@ -6,6 +6,10 @@
 <title>Alexey — Systems & Security Engineer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Cloudflare Web Analytics — get token: dash.cloudflare.com → Web Analytics → tworjaga.github.io -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "PASTE_YOUR_CF_ANALYTICS_TOKEN_HERE"}'></script>
+<!-- Cloudflare Turnstile — get sitekey: dash.cloudflare.com → Turnstile → Add site -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   :root {
     --bg: #0c0c0a; --surface: #111110; --surface2: #1a1a18;
@@ -715,6 +719,7 @@
     </div>
   </div>
   <div class="chat-input-row">
+    <div class="cf-turnstile" data-sitekey="PASTE_YOUR_TURNSTILE_SITEKEY_HERE" data-callback="onTurnstileSuccess" data-size="invisible" style="display:none"></div>
     <input class="chat-input" id="chatInput" type="text" placeholder="Ask anything..." maxlength="300" onkeydown="if(event.key==='Enter')sendChat()">
     <button class="chat-send" id="chatSend" onclick="sendChat()">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
@@ -894,6 +899,10 @@ function applyI18n() {
 }
  
 // Cursor — only on fine-pointer (mouse) devices, never on touch
+// Turnstile
+let turnstileToken = null;
+function onTurnstileSuccess(token) { turnstileToken = token; }
+
 // ── AI CHAT ─────────────────────────────────────────────────────────────────
 const CHAT_SYSTEM = `You are the AI assistant embedded in Alexey's portfolio website (alexey.dev). You speak on behalf of Alexey — a self-taught Systems & Security Engineer based in Moscow, Russia. Be concise, direct, and technical. Match the tone of a sharp engineer: no fluff, no excessive emojis, honest answers.
 
@@ -1025,7 +1034,8 @@ async function sendChat() {
         messages: [
           { role: 'system', content: CHAT_SYSTEM },
           ...chatHistory.map(m => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content }))
-        ]
+        ],
+        cf_turnstile_token: turnstileToken
       })
     });
 
