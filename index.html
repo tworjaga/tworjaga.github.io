@@ -64,6 +64,8 @@
   @media (min-width: 1024px) { .hero-title { font-size: clamp(48px,8vw,110px); margin-bottom: 32px; } .hero-meta { flex-direction: row; gap: 60px; align-items: flex-end; } }
   .hero-meta { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
   .hero-title .accent { color: var(--accent); }
+  .hero-gif { width: 100px; height: auto; display: block; margin-bottom: 16px; }
+  @media (min-width: 1024px) { .hero-gif { width: 130px; margin-bottom: 24px; } }
   .hero-desc { font-family: var(--sans); font-size: 14px; color: var(--muted); max-width: 100%; line-height: 1.7; }
   @media (min-width: 1024px) { .hero-desc { font-size: 15px; max-width: 380px; } }
   .hero-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
@@ -183,6 +185,18 @@
   @media (min-width: 1024px) { .contact-grid { grid-template-columns: 1fr 1fr; gap: 80px; } }
   .contact-headline { font-family: var(--display); font-size: clamp(36px,5vw,64px); font-weight: 800; letter-spacing: -0.04em; line-height: 1; margin-bottom: 24px; }
   .contact-headline .accent { color: var(--accent); }
+  .contact-headline-wrap { position: relative; display: inline-block; }
+  .standing-gif {
+    position: absolute;
+    bottom: 78%;
+    left: 42%;
+    width: 70px;
+    height: auto;
+    pointer-events: none;
+    z-index: 2;
+  }
+  @media (min-width: 640px) { .standing-gif { width: 90px; } }
+  @media (min-width: 1024px) { .standing-gif { width: 110px; left: 42%; } }
   .contact-sub { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 380px; }
   .contact-links { display: flex; flex-direction: column; gap: 2px; }
   .contact-link { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px; border: 1px solid var(--border); text-decoration: none; color: var(--text); transition: all 0.2s; position: relative; overflow: hidden; cursor: pointer; background: transparent; width: 100%; font-family: inherit; font-size: inherit; text-align: left; -webkit-appearance: none; appearance: none; box-sizing: border-box; }
@@ -680,7 +694,13 @@
 <section id="contact">
   <div class="contact-grid">
     <div class="reveal">
-      <div class="contact-headline" data-i18n="contact.headline">Let's<br>work <span class="accent">together.</span></div>
+      <div class="contact-headline-wrap">
+        <div class="contact-headline" data-i18n="contact.headline">Let's<br>work <span class="accent">together.</span></div>
+        <picture>
+          <source srcset="assets/edd-standing.webp" type="image/webp">
+          <img src="assets/edd-standing.gif" alt="" class="standing-gif">
+        </picture>
+      </div>
       <p class="contact-sub" data-i18n="contact.sub">Open to interesting engineering problems, security research, and technical collaborations. Prefer async-first communication.</p>
     </div>
     <div class="contact-links reveal reveal-delay-2">
