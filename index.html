@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tworjaga</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Cloudflare Web Analytics — get token: dash.cloudflare.com → Web Analytics → tworjaga.github.io -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "352a7589d0ba46b8a0d61cb3b5a6216e"}'></script>
+<!-- Cloudflare Turnstile — get sitekey: dash.cloudflare.com → Turnstile → Add site -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="grain"></div>
+<nav>
+  <a href="#" class="nav-logo"><span class="nav-logo-mark" role="img" aria-label="TWG"></span></a>
+  <ul class="nav-links">
+    <li><a href="#about" data-i18n="nav.about">About</a></li>
+    <li><a href="#systems" data-i18n="nav.systems">Systems</a></li>
+    <li><a href="#stack" data-i18n="nav.stack">Stack</a></li>
+    <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('ru')">RU</button>
+      <button class="lang-btn" onclick="setLang('de')">DE</button>
+    </div>
+    <div class="nav-status">
+      <div class="status-dot"></div>
+      <span data-i18n="nav.available">Available</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" onclick="toggleTheme()">
+      <svg class="icon-moon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75 9.75 9.75 0 018.25 6c0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25 9.75 9.75 0 0012.75 21a9.753 9.753 0 009.002-5.998z"/></svg>
+      <svg class="icon-sun" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+    </button>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="navDrawer">
+  <a href="#about" data-i18n="nav.about" onclick="closeDrawer()">About</a>
+  <a href="#systems" data-i18n="nav.systems" onclick="closeDrawer()">Systems</a>
+  <a href="#stack" data-i18n="nav.stack" onclick="closeDrawer()">Stack</a>
+  <a href="#contact" data-i18n="nav.contact" onclick="closeDrawer()">Contact</a>
+  <div class="nav-drawer-lang">
+    <button class="lang-btn" onclick="setLang('en');closeDrawer()">EN</button>
+    <button class="lang-btn" onclick="setLang('ru');closeDrawer()">RU</button>
+    <button class="lang-btn" onclick="setLang('de');closeDrawer()">DE</button>
+  </div>
+</div>
+ 
+<section class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="hero-bg-text">SYSTEMS</div>
+  <div class="hero-tag" data-i18n="hero.tag">Systems &amp; Security Engineer</div>
+  <h1 class="hero-title">
+    <div data-i18n="hero.line1">Building</div>
+    <div class="line2"><span data-i18n="hero.line2a">reliable</span> <span class="accent" data-i18n="hero.line2b">systems</span></div>
+    <div class="line2" id="typing-line" data-i18n="hero.line3">methodically.</div>
+  </h1>
+  <div class="hero-meta">
+    <p class="hero-desc" data-i18n="hero.desc">Mid-Level Software Engineer. Backend, Systems &amp; Security. Self-taught. Hardware-curious. Driven by understanding what happens beneath the surface.</p>
+    <div class="hero-actions">
+      <a href="#systems" class="btn btn-primary" data-i18n="hero.cta1">View Systems ↓</a>
+      <button onclick="openModal()" class="btn btn-ghost" data-i18n="hero.cta2">Get in Touch</button>
+    </div>
+  </div>
+  <div class="hero-scroll" data-i18n="hero.scroll">Scroll</div>
+</section>
+ 
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title" data-i18n="about.title">About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p data-i18n="about.p1">I started programming from <strong>pure curiosity</strong> about how systems work — inspired by tech culture and the desire to understand what happens beneath the surface.</p>
+      <p data-i18n="about.p2">With no formal education, no courses, and no corporate background, I taught myself everything from open online resources. My journey progressed from experimentation to <strong>structured engineering</strong>.</p>
+      <p data-i18n="about.p3">Today I build production-grade systems for security research, hardware analysis, and automation. Every project is built with <strong>full system control</strong> — no black boxes.</p>
+      <ul class="principle-list">
+        <li data-i18n="about.pr1">Understand the system before extending it</li>
+        <li data-i18n="about.pr2">Reliability over hype</li>
+        <li data-i18n="about.pr3">Prefer simple architectures that scale</li>
+        <li data-i18n="about.pr4">Hardware integration: Arduino, ESP32, RF systems</li>
+        <li data-i18n="about.pr5">Write software that is easy to debug and maintain</li>
+        <li data-i18n="about.pr6">Languages: Russian | English | German</li>
+      </ul>
+      <div style="margin-top:32px;border:1px solid var(--border);overflow:hidden;">
+        <iframe data-testid="embed-iframe" style="border-radius:0;display:block;" src="https://open.spotify.com/embed/playlist/28ecsDS8Usf4wAekXXcpPs?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+      </div>
+    </div>
+    <div class="skills-panel reveal reveal-delay-2">
+      <div class="skills-panel-title" data-i18n="about.skillsTitle">Skill Profile</div>
+      <div id="skills-container"></div>
+      <div class="terminal" style="margin-top:32px;">
+        <div class="terminal-header">
+          <div class="term-dot td1"></div><div class="term-dot td2"></div><div class="term-dot td3"></div>
+          <span class="term-title">~/alexey — bash</span>
+        </div>
+        <div class="terminal-body">
+          <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">whoami</span></div>
+          <div class="t-out t-green" data-i18n="term.whoami">alexey — systems &amp; security engineer</div>
+          <div class="t-blank"></div>
+          <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">cat focus.txt</span></div>
+          <div class="t-out"><span class="t-orange" data-i18n="term.focus1">backend</span> | <span class="t-green" data-i18n="term.focus2">embedded</span> | <span class="t-red" data-i18n="term.focus3">security</span></div>
+          <div class="t-blank"></div>
+          <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">echo $LOCATION</span></div>
+          <div class="t-out">Moscow, Russia</div>
+          <div class="t-blank"></div>
+          <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd t-comment"># <span data-i18n="term.comment1">11 production systems shipped</span></span></div>
+          <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">ls repos/ | wc -l</span></div>
+          <div class="t-out t-green">11</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats-grid reveal">
+    <div class="stats-cell"><div class="stats-val">14</div><div class="stats-label" data-i18n="stats.s1">Production Systems</div></div>
+    <div class="stats-cell"><div class="stats-val">5+</div><div class="stats-label" data-i18n="stats.s2">Years Experience</div></div>
+    <div class="stats-cell"><div class="stats-val">100%</div><div class="stats-label" data-i18n="stats.s3">Self Taught</div></div>
+    <div class="stats-cell"><div class="stats-val">∞</div><div class="stats-label" data-i18n="stats.s4">Curiosity</div></div>
+  </div>
+</section>
+ 
+<section id="systems">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title" data-i18n="systems.title">Systems</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="featured-project reveal" data-id="cherenkov" data-repo="tworjaga/cherenkov" data-name="Cherenkov" data-date="In Development" data-desc-key="proj.cherenkov" data-tags="Rust,WebAssembly,Real-time,ML,Radiological" data-gh="https://github.com/tworjaga/cherenkov" onclick="openProjModal(this)" style="cursor:pointer;">
+      <div class="project-name">Cherenkov <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div>
+      <p class="project-desc" data-i18n="proj.cherenkov">Real-time global radiological intelligence platform. Aggregates 10,000+ sensors, detects anomalies in milliseconds, predicts fallout dispersion. Built with Rust + WebAssembly for zero-cost architecture at 100% free tier.</p>
+      <div class="project-tags"><span class="tag">Rust</span><span class="tag">WebAssembly</span><span class="tag">Real-time</span><span class="tag">ML</span><span class="tag">Radiological</span></div>
+      <div class="project-metrics">
+        <div class="metric"><div class="metric-val">98%</div><div class="metric-label" data-i18n="metric.perf">Performance</div></div>
+        <div class="metric"><div class="metric-val">99%</div><div class="metric-label" data-i18n="metric.rel">Reliability</div></div>
+        <div class="metric"><div class="metric-val">10K+</div><div class="metric-label" data-i18n="metric.sensors">Sensors</div></div>
+        <div class="metric"><div class="metric-val">&lt;1ms</div><div class="metric-label" data-i18n="metric.detect">Detection</div></div>
+      </div>
+    </div>
+    <div class="tag-filter reveal" id="tagFilter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="C">C</button>
+      <button class="filter-btn" data-filter="Python">Python</button>
+      <button class="filter-btn" data-filter="Rust">Rust</button>
+      <button class="filter-btn" data-filter="Hardware">Hardware</button>
+      <button class="filter-btn" data-filter="Security">Security</button>
+      <button class="filter-btn" data-filter="AI">AI</button>
+      <button class="filter-btn" data-filter="Networking">Networking</button>
+    </div>
+    <div class="projects-grid reveal" id="projectsGrid">
+      <!-- Row 1 -->
+      <div class="project-card" data-id="esp32gotchi" data-repo="tworjaga/ESP32Gotchi" data-name="ESP32Gotchi" data-date="Mar 2026" data-desc-key="proj.esp32gotchi" data-tags="C,FreeRTOS,ESP32,Hardware,WiFi" data-gh="https://github.com/tworjaga/ESP32Gotchi" onclick="openProjModal(this)"><div class="card-name">ESP32Gotchi</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.esp32gotchi">Autonomous WPA/WPA2 handshake capture device on ESP32-WROOM-32.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">FreeRTOS</span><span class="card-tag">ESP32</span><span class="card-tag">Hardware</span><span class="card-tag">WiFi</span></div><div class="gh-stats"></div><div class="card-perf">100%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'esp32gotchi')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="pinetcore" data-repo="tworjaga/PiNetCore" data-name="PiNetCore" data-date="Mar 2026" data-desc-key="proj.pinetcore" data-tags="Rust,React,RaspberryPi,Networking,Docker" data-gh="https://github.com/tworjaga/PiNetCore" onclick="openProjModal(this)"><div class="card-name">PiNetCore</div><div class="card-date">Mar 2026</div><p class="card-desc" data-i18n="proj.pinetcore">Production-ready Raspberry Pi 5 network appliance.</p><div class="card-tags"><span class="card-tag">Rust</span><span class="card-tag">React</span><span class="card-tag">RaspberryPi</span><span class="card-tag">Networking</span><span class="card-tag">Docker</span></div><div class="gh-stats"></div><div class="card-perf">46%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'pinetcore')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <!-- Row 2 -->
+      <div class="project-card" data-id="securemysite" data-repo="tworjaga/SecureMySite" data-name="SecureMySite" data-date="Feb 27, 2026" data-desc-key="proj.securemysite" data-tags="Python,PyQt6,SAST/DAST,Security" data-gh="https://github.com/tworjaga/SecureMySite" onclick="openProjModal(this)"><div class="card-name">SecureMySite</div><div class="card-date">Feb 27, 2026</div><p class="card-desc" data-i18n="proj.securemysite">Local desktop security analyzer for AI-generated web projects.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">PyQt6</span><span class="card-tag">SAST/DAST</span><span class="card-tag">Security</span></div><div class="gh-stats"></div><div class="card-perf">74%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'securemysite')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="gemini-overseer" data-repo="tworjaga/gemini-overseer" data-name="GEMINI-OVERSEER" data-date="Recently" data-desc-key="proj.gemini" data-tags="TypeScript,VS Code,AI,Security" data-gh="https://github.com/tworjaga/gemini-overseer" onclick="openProjModal(this)"><div class="card-name">GEMINI-OVERSEER <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.gemini">Enterprise-grade AI orchestration and monitoring system for BLACKBOXAI within VS Code.</p><div class="card-tags"><span class="card-tag">TypeScript</span><span class="card-tag">VS Code</span><span class="card-tag">AI</span><span class="card-tag">Security</span></div><div class="gh-stats"></div><div class="card-perf">59%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'gemini-overseer')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <!-- Row 3 -->
+      <div class="project-card" data-id="pivotmap" data-repo="tworjaga/pivotmap" data-name="pivotmap" data-date="Feb 26, 2026" data-desc-key="proj.pivotmap" data-tags="Python,Graph,Offensive,Security" data-gh="https://github.com/tworjaga/pivotmap" onclick="openProjModal(this)"><div class="card-name">pivotmap</div><div class="card-date">Feb 26, 2026</div><p class="card-desc" data-i18n="proj.pivotmap">Attack path intelligence engine for offensive security teams.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Graph</span><span class="card-tag">Offensive</span><span class="card-tag">Security</span></div><div class="gh-stats"></div><div class="card-perf">57%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'pivotmap')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="bluescope" data-repo="tworjaga/bluescope" data-name="bluescope" data-date="Feb 25, 2026" data-desc-key="proj.bluescope" data-tags="Python,Bluetooth,ML,Security" data-gh="https://github.com/tworjaga/bluescope" onclick="openProjModal(this)"><div class="card-name">bluescope</div><div class="card-date">Feb 25, 2026</div><p class="card-desc" data-i18n="proj.bluescope">Bluetooth Monitoring &amp; Security Platform. ML-powered anomaly detection.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Bluetooth</span><span class="card-tag">ML</span><span class="card-tag">Security</span></div><div class="gh-stats"></div><div class="card-perf">75%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'bluescope')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <!-- Row 4 -->
+      <div class="project-card" data-id="flipper-rf-lab" data-repo="tworjaga/flipper-rf-lab" data-name="flipper-rf-lab" data-date="Feb 14, 2026" data-desc-key="proj.flipper" data-tags="C,RF,Hardware,Flipper" data-gh="https://github.com/tworjaga/flipper-rf-lab" onclick="openProjModal(this)"><div class="card-name">flipper-rf-lab</div><div class="card-date">Feb 14, 2026</div><p class="card-desc" data-i18n="proj.flipper">RF analysis platform for Flipper Zero. 15 advanced features, lab-grade timing.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">RF</span><span class="card-tag">Hardware</span><span class="card-tag">Flipper</span></div><div class="gh-stats"></div><div class="card-perf">96%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'flipper-rf-lab')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="keyspace" data-repo="tworjaga/keyspace" data-name="keyspace" data-date="Feb 10, 2026" data-desc-key="proj.keyspace" data-tags="Python,Cryptography,Security,Qt" data-gh="https://github.com/tworjaga/keyspace" onclick="openProjModal(this)"><div class="card-name">keyspace</div><div class="card-date">Feb 10, 2026</div><p class="card-desc" data-i18n="proj.keyspace">Cross-platform password auditing tool. PyQt6 GUI with modular backend.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Cryptography</span><span class="card-tag">Security</span><span class="card-tag">Qt</span></div><div class="gh-stats"></div><div class="card-perf">75%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'keyspace')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <!-- Row 5 -->
+      <div class="project-card" data-id="flowscope" data-repo="tworjaga/FlowScope" data-name="FlowScope" data-date="Feb 19, 2026" data-desc-key="proj.flowscope" data-tags="Python,Networking,Analysis,Security" data-gh="https://github.com/tworjaga/FlowScope" onclick="openProjModal(this)"><div class="card-name">FlowScope</div><div class="card-date">Feb 19, 2026</div><p class="card-desc" data-i18n="proj.flowscope">Flow-based network traffic analysis and anomaly investigation.</p><div class="card-tags"><span class="card-tag">Python</span><span class="card-tag">Networking</span><span class="card-tag">Analysis</span><span class="card-tag">Security</span></div><div class="gh-stats"></div><div class="card-perf">87%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'flowscope')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="devzero" data-repo="tworjaga/DevZero" data-name="DevZero" data-date="Recently" data-desc-key="proj.devzero" data-tags="JavaScript,Education,Platform,Static" data-gh="https://github.com/tworjaga/DevZero" onclick="openProjModal(this)"><div class="card-name">DevZero <span class="prod-badge" data-i18n="badge.prod">IN PRODUCTION</span></div><div class="card-date">Recently</div><p class="card-desc" data-i18n="proj.devzero">Comprehensive static educational platform for developers.</p><div class="card-tags"><span class="card-tag">JavaScript</span><span class="card-tag">Education</span><span class="card-tag">Platform</span><span class="card-tag">Static</span></div><div class="gh-stats"></div><div class="card-perf">32%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'devzero')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <div class="project-card" data-id="esp32watchdog" data-repo="tworjaga/Esp32watchdog" data-name="ESP32Watchdog" data-date="May 2026" data-desc-key="proj.esp32watchdog" data-tags="C,FreeRTOS,ESP32,Hardware,Security,WiFi" data-gh="https://github.com/tworjaga/Esp32watchdog" onclick="openProjModal(this)"><div class="card-name">ESP32Watchdog</div><div class="card-date">May 2026</div><p class="card-desc" data-i18n="proj.esp32watchdog">Passive Wi-Fi threat monitor for ESP32. Detects deauth floods, evil twin APs and beacon floods.</p><div class="card-tags"><span class="card-tag">C</span><span class="card-tag">FreeRTOS</span><span class="card-tag">ESP32</span><span class="card-tag">Hardware</span><span class="card-tag">Security</span><span class="card-tag">WiFi</span></div><div class="gh-stats"></div><div class="card-perf">100%</div><button class="card-copy" title="Copy link" onclick="copyCardLink(event,'esp32watchdog')"><svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></button></div>
+      <a href="#" onclick="event.preventDefault();openGhDrawer()" class="card-cta">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        <span class="card-cta-label">View all on GitHub →</span>
+      </a>
+    </div>
+  </div>
+</section>
+ 
+<section id="stack">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title" data-i18n="stack.title">Stack</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="stack-grid reveal" id="stack-grid"></div>
+  <div class="terminal reveal">
+    <div class="terminal-header">
+      <div class="term-dot td1"></div><div class="term-dot td2"></div><div class="term-dot td3"></div>
+      <span class="term-title">engineering-principles.sh</span>
+    </div>
+    <div class="terminal-body">
+      <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">cat /etc/engineer/principles</span></div>
+      <div class="t-out"><span class="t-green">[CORE]</span> <span data-i18n="about.pr1">Understand the system before extending it</span></div>
+      <div class="t-out"><span class="t-green">[CORE]</span> <span data-i18n="about.pr2">Reliability over hype</span></div>
+      <div class="t-out"><span class="t-green">[CORE]</span> <span data-i18n="about.pr3">Prefer simple architectures that scale</span></div>
+      <div class="t-out"><span class="t-green">[CORE]</span> <span data-i18n="about.pr5">Write software that is easy to debug and maintain</span></div>
+      <div class="t-blank"></div>
+      <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">uptime</span></div>
+      <div class="t-out">5+ <span data-i18n="term.years">years</span> — <span class="t-orange" data-i18n="term.selftaught">self-taught</span>, <span class="t-green" data-i18n="term.learning">still learning</span> | <span class="t-blue" data-i18n="term.osint">osint</span>, <span class="t-violet" data-i18n="term.pentest">pentest</span></div>
+      <div class="t-blank"></div>
+      <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd t-comment"># <span data-i18n="term.comment2">always curious about what's below the surface</span></span></div>
+      <div class="t-line"><span class="t-prompt">❯</span><span class="t-cmd">_</span><span style="animation:blink 1s step-end infinite;display:inline-block;width:8px;height:14px;background:var(--accent);vertical-align:middle;margin-left:2px;"></span></div>
+    </div>
+  </div>
+</section>
+ 
+<section id="contact">
+  <div class="contact-grid">
+    <div class="reveal">
+      <div class="contact-headline" data-i18n="contact.headline">Let's<br>work <span class="accent">together.</span></div>
+      <p class="contact-sub" data-i18n="contact.sub">Open to interesting engineering problems, security research, and technical collaborations. Prefer async-first communication.</p>
+    </div>
+    <div class="contact-links reveal reveal-delay-2">
+      <a href="#" onclick="event.preventDefault();openGhDrawer()" class="contact-link">
+        <div class="contact-link-left"><div class="contact-link-icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></div><div><div class="contact-link-name">GitHub</div><div class="contact-link-handle">@tworjaga</div></div></div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="https://t.me/smtrcv" target="_blank" class="contact-link">
+        <div class="contact-link-left"><div class="contact-link-icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div><div><div class="contact-link-name">Telegram</div><div class="contact-link-handle">@smtrcv</div></div></div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <button onclick="copyEmail(this)" class="contact-link">
+        <div class="contact-link-left"><div class="contact-link-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></div><div><div class="contact-link-name">Email</div><div class="contact-link-handle" id="email-label"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e093818c948187818e8f96818c858b93858aa0878d81898cce838f8d">[email&#160;protected]</a></div></div></div>
+        <span class="contact-link-arrow" id="email-arrow">↗</span>
+      </button>
+    </div>
+  </div>
+</section>
+ 
+<footer>
+  <div class="footer-left"><span>Alexey</span>.dev — <span data-i18n="footer.built">Built with precision.</span> 2025 <svg class="footer-mark" viewBox="0 0 1436 693" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g transform="translate(0,693) scale(0.1,-0.1)" fill="currentColor" stroke="none"><path d="M390 4435 l0 -2295 370 0 370 0 0 305 0 305 365 0 365 0 0 1255 0
+1255 460 0 460 0 0 -2570 0 -2570 550 0 550 0 0 2570 0 2570 425 0 c234 0 426
+-1 426 -2 1 -2 10 -558 19 -1236 10 -678 20 -1235 23 -1239 3 -3 160 -14 349
+-24 189 -10 344 -18 346 -19 1 0 2 -134 2 -299 l0 -298 -92 -6 c-51 -3 -209
+-12 -350 -18 l-257 -13 -5 -60 c-3 -34 -10 -146 -16 -251 -6 -104 -13 -223
+-16 -262 l-6 -73 371 0 371 0 0 -335 0 -335 -365 0 -365 0 0 -335 0 -335 365
+0 365 0 0 335 0 335 370 0 370 0 0 335 0 335 -370 0 -370 0 1 53 c0 28 8 174
+17 322 l17 270 305 17 c168 9 326 17 353 17 l47 1 0 2295 0 2295 -2910 0
+-2910 0 0 -2295z"/><path d="M7067 6723 c-4 -3 -7 -1491 -7 -3305 l0 -3298 735 0 735 0 0 3305 0
+3305 -728 0 c-401 0 -732 -3 -735 -7z"/><path d="M9390 5995 l0 -735 829 0 829 0 -4 -152 c-2 -84 -8 -632 -14 -1218
+-5 -586 -13 -1219 -16 -1408 l-7 -342 352 0 351 0 0 -340 0 -340 -335 0 -335
+0 0 -335 0 -335 335 0 335 0 0 -335 0 -335 370 0 370 0 0 329 0 330 -42 5
+c-24 3 -144 10 -268 16 -124 5 -262 13 -307 16 l-83 6 0 303 0 303 63 6 c34 3
+163 10 287 16 124 6 253 13 288 16 l62 6 0 327 0 328 -82 6 c-46 3 -200 11
+-343 18 -143 7 -264 16 -269 20 -6 6 -41 436 -46 567 0 9 80 12 370 12 l370 0
+0 1250 c0 688 1 1250 3 1251 1 0 363 9 805 19 442 9 806 21 810 24 3 4 12 237
+18 519 7 282 15 603 18 715 l6 202 -2360 0 -2360 0 0 -735z"/><path d="M1130 1795 l0 -335 -370 0 -370 0 0 -335 0 -335 370 0 370 0 0 -335
+0 -335 365 0 365 0 0 335 0 335 -365 0 -365 0 0 335 0 335 365 0 365 0 0 335
+0 335 -365 0 -365 0 0 -335z"/></g></svg></div>
+  <div class="footer-right">Moscow, Russia · Systems &amp; Security</div>
+</footer>
+ 
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">×</button>
+    <div class="modal-title" data-i18n="contact.modal.title">Get in Touch</div>
+    <div class="modal-sub" data-i18n="contact.modal.sub">// open to interesting problems and collaborations</div>
+    <div class="contact-links">
+      <a href="https://github.com/tworjaga" target="_blank" class="contact-link">
+        <div class="contact-link-left"><div class="contact-link-icon" style="width:32px;height:32px;"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></div><div><div class="contact-link-name" style="font-size:15px;">GitHub</div><div class="contact-link-handle">@tworjaga</div></div></div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+      <a href="https://t.me/smtrcv" target="_blank" class="contact-link">
+        <div class="contact-link-left"><div class="contact-link-icon" style="width:32px;height:32px;"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div><div><div class="contact-link-name" style="font-size:15px;">Telegram</div><div class="contact-link-handle">@smtrcv</div></div></div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</div>
+ 
+<!-- Chat widget -->
+<button class="chat-btn" id="chatBtn" aria-label="Chat with AI assistant" onclick="toggleChat()">
+  <svg fill="currentColor" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+  <span class="chat-btn-notif" id="chatNotif"></span>
+</button>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-panel-header">
+    <div class="chat-avatar">A</div>
+    <div style="flex:1">
+      <div class="chat-panel-name">Alexey's Assistant</div>
+      <div class="chat-panel-status" id="chatStatus">Ask me anything</div>
+    </div>
+    <button class="chat-close-btn" onclick="toggleChat()" title="Close">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg chat-msg-ai">
+      <div class="chat-msg-bubble">Hey 👋 I'm Alexey's AI assistant. Ask me about his projects, tech stack, experience, or if he's available for work!</div>
+    </div>
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">What projects has he built?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">What's his tech stack?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">Is he open to work?</button>
+      <button class="chat-suggestion" onclick="sendSuggestion(this)">Tell me about flipper-rf-lab</button>
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <div class="cf-turnstile" data-sitekey="352a7589d0ba46b8a0d61cb3b5a6216e" data-callback="onTurnstileSuccess" data-size="invisible" style="display:none"></div>
+    <input class="chat-input" id="chatInput" type="text" placeholder="Ask anything..." maxlength="300" onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="chat-send" id="chatSend" onclick="sendChat()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- GitHub Stats Drawer -->
+<div class="gh-drawer-overlay" id="ghOverlay" onclick="closeGhDrawer()"></div>
+<div class="gh-drawer" id="ghDrawer">
+  <div class="gh-drawer-header">
+    <div class="gh-drawer-title">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      tworjaga — Code Activity
+    </div>
+    <button class="gh-drawer-close" onclick="closeGhDrawer()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="gh-drawer-body">
+
+    <div class="slabel">01 — Profile Summary</div>
+    <div class="widget-full">
+      <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tworjaga&theme=transparent" alt="Profile Details" loading="lazy">
+    </div>
+
+    <div class="slabel">02 — Stats &amp; Productive Hours</div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=tworjaga&theme=transparent" alt="Stats" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-profile-summary-cards.vercel.app/api/cards/productive-time?username=tworjaga&utcOffset=3&theme=transparent" alt="Productive Time" loading="lazy"></div>
+    </div>
+
+    <div class="slabel">03 — Language Breakdown</div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=tworjaga&theme=transparent" alt="Repos per Language" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=tworjaga&theme=transparent" alt="Most Commit Language" loading="lazy"></div>
+    </div>
+
+    <div class="slabel">04 — Streak</div>
+    <div class="widget-full">
+      <img src="https://streak-stats.demolab.com?user=tworjaga&theme=transparent&hide_border=true&card_width=800&fire=c8f040&ring=c8f040&currStreakLabel=c8f040&sideLabels=c8f040&border=c8f040&dates=7a7870&stroke=c8f040" alt="GitHub Streak" loading="lazy">
+    </div>
+
+    <div class="slabel">05 — Activity Graph</div>
+    <div class="widget-full">
+      <img src="https://github-readme-activity-graph.vercel.app/graph?username=tworjaga&bg_color=00000000&color=c8f040&line=c8f040&point=c8f040&area=true&area_color=c8f040&hide_border=true&radius=0" alt="Activity Graph" loading="lazy">
+    </div>
+
+    <div class="slabel">06 — GitHub Stats</div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api?username=tworjaga&show_icons=true&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040&hide_border=false&rank_icon=github" alt="GitHub Stats" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=tworjaga&layout=compact&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040&hide_border=false" alt="Top Languages" loading="lazy"></div>
+    </div>
+
+    <div class="slabel">07 — Pinned Repositories</div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=flipper-rf-lab&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="flipper-rf-lab" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=bluescope&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="bluescope" loading="lazy"></div>
+    </div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=pivotmap&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="pivotmap" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=keyspace&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="keyspace" loading="lazy"></div>
+    </div>
+    <div class="widget-row">
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=SecureMySite&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="SecureMySite" loading="lazy"></div>
+      <div class="widget-half"><img src="https://github-readme-stats.vercel.app/api/pin/?username=tworjaga&repo=ESP32Gotchi&bg_color=00000000&border_color=c8f040&title_color=c8f040&text_color=e8e6e0&icon_color=c8f040" alt="ESP32Gotchi" loading="lazy"></div>
+    </div>
+
+    <div class="gh-cta">
+      <a href="https://github.com/tworjaga" target="_blank" rel="noopener" class="gh-link">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        Open full GitHub profile →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+</button>
+
+<!-- Project detail modal -->
+<div class="proj-modal-overlay" id="projModal" onclick="closeProjModal(event)">
+  <div class="proj-modal" id="projModalInner">
+    <div class="proj-modal-header">
+      <button class="proj-modal-close" onclick="closeProjModalNow()">×</button>
+      <div class="proj-modal-tag" id="pm-tag">PROJECT</div>
+      <div class="proj-modal-name" id="pm-name"></div>
+      <div class="proj-modal-date" id="pm-date"></div>
+    </div>
+    <div class="proj-modal-body">
+      <p class="proj-modal-desc" id="pm-desc"></p>
+      <div class="proj-modal-tags" id="pm-tags"></div>
+      <div class="proj-modal-divider"></div>
+      <div class="proj-modal-links" id="pm-links"></div>
+      <div class="readme-body" id="pm-readme"></div>
+    </div>
+  </div>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="script.js" defer></script>
+</body>
+</html>
