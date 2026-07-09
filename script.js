@@ -153,7 +153,7 @@ let turnstileToken = null;
 function onTurnstileSuccess(token) { turnstileToken = token; }
 
 // ── AI CHAT ─────────────────────────────────────────────────────────────────
-const CHAT_SYSTEM = `You are the technical assistant for Alexey's portfolio (alexey.dev). Your role is to provide accurate information about Alexey's projects, technical skills, and offer guidance on system engineering.
+const CHAT_SYSTEM = `You are the technical assistant for Alexey's portfolio (tworjaga). Your role is to provide accurate information about Alexey's projects, technical skills, and offer guidance on system engineering.
 
 COMMUNICATION STYLE:
 - Adapt to the language the user is using.
