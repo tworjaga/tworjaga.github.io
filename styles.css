@@ -439,7 +439,7 @@
   .readme-body a:hover { border-bottom-color: var(--accent); }
   .readme-body code { font-family: var(--mono); font-size: 12px; background: var(--surface2); color: var(--accent2); padding: 2px 6px; border: 1px solid var(--border); }
   .readme-body pre { background: var(--bg); border: 1px solid var(--border); padding: 16px 20px; overflow-x: auto; margin: 16px 0; -webkit-overflow-scrolling: touch; }
-  .readme-body pre code { background: none; border: none; padding: 0; font-size: 12px; color: var(--text); line-height: 1.7; }
+  .readme-body pre code { background: none; border: none; padding: 0; font-size: 12px; color: var(--text); line-height: 1.7; white-space: pre; font-family: var(--mono); }
   .readme-body blockquote { border-left: 2px solid var(--accent); padding: 8px 16px; margin: 16px 0; color: var(--muted); font-style: italic; background: rgba(200,240,64,0.03); }
   .readme-body ul, .readme-body ol { padding-left: 20px; margin: 0 0 14px; }
   .readme-body li { margin-bottom: 4px; }
@@ -449,7 +449,8 @@
   .readme-body tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
   [data-theme="light"] .readme-body tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
   .readme-body hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
-  .readme-body img { max-width: 100%; height: auto; display: none; } /* hide external images — they won't load from GH */
+  .readme-body img { max-width: 100%; height: auto; }
+  .readme-body img.readme-badge { display: inline-block; vertical-align: middle; height: 20px; width: auto; margin: 2px 4px 2px 0; }
   .readme-body .badge-strip { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
   .readme-body .badge { font-family: var(--mono); font-size: 10px; border: 1px solid var(--border); padding: 2px 8px; color: var(--muted); letter-spacing: 0.04em; }
   .readme-tab-bar { display: flex; border-bottom: 1px solid var(--border); }
