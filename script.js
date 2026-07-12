@@ -153,7 +153,7 @@ let turnstileToken = null;
 function onTurnstileSuccess(token) { turnstileToken = token; }
 
 // ── AI CHAT ─────────────────────────────────────────────────────────────────
-const CHAT_SYSTEM = `You are the technical assistant for Alexey's portfolio (tworjaga). Your role is to provide accurate information about Alexey's projects, technical skills, and offer guidance on system engineering.
+const CHAT_SYSTEM = `You are the technical assistant for Alexey's portfolio (alexey.dev). Your role is to provide accurate information about Alexey's projects, technical skills, and offer guidance on system engineering.
 
 COMMUNICATION STYLE:
 - Adapt to the language the user is using.
@@ -169,50 +169,12 @@ ABOUT ALEXEY:
 - Philosophy: Values efficiency, system-level understanding, and solving complex technical challenges.
 
 PROJECTS (USE THESE FOR TECHNICAL CONTEXT):
-
-- **Cherenkov** — Real‑time radiological intelligence platform.  
-  *Rust (Tokio, Timely Dataflow, Candle ML) + TypeScript/React (Next.js, Deck.gl).*  
-  10M+ events/sec, sub‑10ms anomaly detection, WebGL2 globe (100k points @ 60fps), plume modeling, 15+ data sources, WebSocket (1M+ concurrent), GraphQL. In development, 253 tests.
-
-- **ESP32Gotchi** — Autonomous WPA/WPA2 handshake sniffer.  
-  *C++ (FreeRTOS, ESP32).* Passive capture, 5 pinned tasks, static allocation (~104KB), IEEE 802.11‑2020 EAPOL parsing, PCAP to SD, GPS (Neo‑6M) with UTC timestamps, battery ADC, deep sleep, 4‑page OLED. ~10‑15 EUR. Production v1.2.2.
-
-- **ESP32Watchdog** — Passive Wi‑Fi threat detector.  
-  *C++ (FreeRTOS, ESP32).* Modes: DEAUTH (flood), TWIN (evil twin), FLOOD (beacon flood). RSSI pre‑filter (-90dBm), 3 pinned tasks, static allocation (~55KB), CSV logging (rotate at 4MB), mode cycle via button. ~11 EUR. Production v1.0.0.
-
-- **PiNetCore** — Raspberry Pi network appliance.  
-  *Rust (Tokio, Axum, pnet, sqlx) + React/TypeScript (Vite, Tailwind, Recharts).* Full router control, nftables firewall, packet logging to SQLite, plugin system (WireGuard, Pi‑hole, Suricata), REST + Prometheus /metrics, WebSocket dashboard, Docker ARM64 + systemd. Production ready.
-
-- **Flipper RF Lab** — RF analysis for Flipper Zero.  
-  *C (FreeRTOS, STM32 HAL) + Python tests.* 15 features: fingerprinting (timing drift, slopes), adaptive signal modeling, cross‑session correlation, clustering (K‑means), threat scoring, 0.1μs timing (DWT), real‑time 300‑928 MHz spectrum, replay integrity, 5:1+ compression (RLE/Huffman/LZ77), Q15.16 fixed‑point math. 30/30 tests. Production.
-
-- **PivotMap** — Attack path intelligence engine.  
-  *Python 3.12+ (FastAPI, Typer, networkx, SQLModel, Pydantic).* Ingests Nmap XML & Nuclei JSON, fuzzy CVE matching, directed attack graph, computes shortest/highest‑impact/lowest‑complexity paths, PivotScore (exploitability × exposure × privilege × position × criticality), reports (Markdown/HTML/JSON). Production ready.
-
-- **FlowScope** — Network traffic analyzer.  
-  *Python (PyQt6, Scapy, cryptography, netifaces).* TLS/HTTPS: handshake, JA3, X.509; WiFi: rogue AP, WPA3, interference; anomalies: DNS tunneling, port scanning, C2, beaconing; live graphs/heatmaps/flow diagrams; protocols (TCP/UDP/ICMP/ARP/DHCP/DNS/HTTP/NTP/mDNS/SSDP/QUIC); export CSV/PCAP/HTML/syslog. Production v2.0.
-
-- **BlueScope** — Enterprise Bluetooth monitoring & security.  
-  *Python (PyQt6, bleak, scikit‑learn, PyTorch).* Real‑time BLE capture, ML anomaly (Isolation Forest/Autoencoders), signal duplication (immediate/delayed/burst/random), security audit, channel analyzer, Faraday simulator, device profiling, 6‑tab dark GUI. Production v0.2.0.
-
-- **KeySpace** — Password cracking tool.  
-  *Python (PyQt6).* Attack types: dictionary (WPA2), brute‑force, rule‑based, hybrid, mask, combinator, PIN. Real‑time progress, ETA, checkpoints, mutation rules (leet, case, append, keyboard). Production.
-
-- **SecureMySite** — Offline web security analyzer.  
-  *Python (PyQt6).* 100% offline: SAST (Python/JS), dependency scan (requirements.txt, package.json), config scan (.env, settings.py), local web scan (localhost only), AI fix prompts, security score (0‑100), CLI mode. Production.
-
-- **GEMINI Overseer** — AI orchestration for VS Code.  
-  *TypeScript (VS Code Extension API).* Real‑time telemetry (editor, terminal, git), command bridge (PROMPT_DISPATCH, SYSTEM_INTERVENTION, FILESYSTEM_OVERRIDE, BROWSER_ORCHESTRATION), security sandbox (forbidden patterns, secrets, path validation), quality gates, multi‑mode supervision (Autonomous/Supervised/Strict/Locked). Production.
-
----
-
-**Technology Distribution:**  
-- Rust: Cherenkov, PiNetCore  
-- C/C++: ESP32Gotchi, ESP32Watchdog, Flipper RF Lab  
-- Python: PivotMap, FlowScope, BlueScope, KeySpace, SecureMySite  
-- TypeScript: Cherenkov (frontend), PiNetCore (frontend), GEMINI Overseer  
-
-**Recurring Engineering Patterns:** static memory allocation (embedded), real‑time stream processing, ML‑powered detection, graph‑based analysis, cross‑platform PyQt6 GUI, WebSocket real‑time updates, Prometheus metrics, FreeRTOS task pinning, packet capture (pnet/Scapy/bleak).
+- Cherenkov: Real-time radiological intelligence platform (Rust + WebAssembly).
+- ESP32Gotchi / Watchdog: Wireless threat monitoring and handshake capture (FreeRTOS).
+- PiNetCore: Network appliance for Raspberry Pi 5 (Rust, nftables, Suricata).
+- Flipper-rf-lab: RF analysis platform (C/DWT cycle counting).
+- Security Tools: pivotmap (attack paths), FlowScope (traffic analysis), BlueScope (BLE security), KeySpace (password audit), SecureMySite (SAST/DAST).
+- GEMINI Overseer: AI orchestration tool for VS Code.
 
 OPERATIONAL RULES:
 - Referral: If a user is inquiring about collaboration or professional work, direct them to Telegram (@smtrcv) or Discord (@tworjaga).
@@ -606,6 +568,9 @@ function mdToHtml(md) {
     .replace(/```[\w]*\n([\s\S]*?)```/g, (_,c) => `<pre class="readme-pre"><code>${c.trimEnd()}</code></pre>`)
     // inline code
     .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // images (must run BEFORE the link rule, and handle badge chains like [![alt](img)](link))
+    .replace(/\[!\[([^\]]*)\]\(([^)]+)\)\]\(([^)]+)\)/g, '<a href="$3" target="_blank" rel="noopener"><img class="readme-badge" src="$2" alt="$1" loading="lazy"></a>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img class="readme-badge" src="$2" alt="$1" loading="lazy">')
     // horizontal rules
     .replace(/^---+$/gm, '<hr class="readme-hr">')
     // headings
