@@ -468,3 +468,6 @@
     30%{transform:translate(-1%,2%)} 40%{transform:translate(3%,-2%)} 50%{transform:translate(-2%,3%)}
     60%{transform:translate(2%,-1%)} 70%{transform:translate(-3%,2%)} 80%{transform:translate(1%,-3%)} 90%{transform:translate(-1%,1%)}
   }
+
+  /* SEO: visually hidden, still readable by crawlers and screen readers */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
