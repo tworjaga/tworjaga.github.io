@@ -727,7 +727,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') document.getEle
  
 // Email copy
 function copyEmail() {
-  const email = 'tworjaga@outlook.com';
+  const email = 'me@alexeysaltaganov.com';
   function confirm() {
     const l=document.getElementById('email-label'), a=document.getElementById('email-arrow');
     l.textContent='✓ Copied!'; l.style.color='var(--accent)';
