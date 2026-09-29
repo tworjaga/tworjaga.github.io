@@ -1,0 +1,168 @@
+# robots.txt for https://tworjaga.github.io/
+#
+# NOTE ON SECURITY: this file is public and world-readable. It is a
+# courtesy request to well-behaved crawlers, not an access control
+# mechanism -- it cannot stop a scraper or attacker that ignores it, and
+# listing a private path here would only advertise it. Anything that
+# actually needs to be private is protected server-side (auth, secrets),
+# not hidden through this file.
+
+# ---------------------------------------------------------------------
+# Default: allow legitimate crawling, keep private/system pages out.
+# ---------------------------------------------------------------------
+User-agent: *
+Allow: /
+Disallow: /privacy.html
+Crawl-delay: 5
+
+# ---------------------------------------------------------------------
+# Search engines -- explicitly allowed, no crawl-delay so indexing stays
+# fast. List the ones that actually matter for your audience.
+# ---------------------------------------------------------------------
+User-agent: Googlebot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: YandexBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: Baiduspider
+Allow: /
+Disallow: /privacy.html
+
+# ---------------------------------------------------------------------
+# AI crawlers -- allowed to fetch pages (so tools like ChatGPT, Perplexity,
+# and Claude can look up and cite this site when answering questions), but
+# NOT permitted to use the content for model training. Standard Allow/
+# Disallow can only say "fetch or don't" -- it has no way to express
+# "fetch but don't train on it". The Content-Signal line further down is
+# the actual mechanism for that distinction, and reputable AI crawlers
+# increasingly read it (Cloudflare's Content Signals extension to
+# robots.txt). Nothing here can force compliance from bots that skip it,
+# but it does put your preference on record and gets honored by the
+# well-behaved crawlers listed.
+# ---------------------------------------------------------------------
+User-agent: GPTBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /privacy.html
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /privacy.html
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /privacy.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /privacy.html
+
+# ---------------------------------------------------------------------
+# AI training / bulk-scraping crawlers with no "search"-style use case --
+# blocked outright rather than allowed-with-a-signal, since these exist
+# specifically to build training datasets, not to answer live queries.
+# ---------------------------------------------------------------------
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# ---------------------------------------------------------------------
+# SEO / marketing scrapers -- these hammer sites for backlink and rank
+# data and offer nothing back; blocking them is standard practice and
+# does not affect real search visibility.
+# ---------------------------------------------------------------------
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: SEOkicks
+Disallow: /
+
+User-agent: Barkrowler
+Disallow: /
+
+# ---------------------------------------------------------------------
+# Generic/aggressive scraping frameworks with no legitimate reason to
+# crawl a small alliance site. Real attackers ignore this outright, but
+# it does deter low-effort mass scrapers running with default settings.
+# ---------------------------------------------------------------------
+User-agent: SiteSnagger
+Disallow: /
+
+User-agent: WebCopier
+Disallow: /
+
+User-agent: HTTrack
+Disallow: /
+
+User-agent: Wget
+Disallow: /
+
+User-agent: python-requests
+Disallow: /
+
+User-agent: Scrapy
+Disallow: /
+
+# ---------------------------------------------------------------------
+# Content Signals (Cloudflare extension, read by an increasing number of
+# AI crawlers): explicitly separates "can appear in search / be used as
+# live input for answers" from "can be used to train models". This is
+# the actual mechanism for "AI can look but not learn" -- Allow/Disallow
+# above cannot express that distinction on its own.
+# ---------------------------------------------------------------------
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
